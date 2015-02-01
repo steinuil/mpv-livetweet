@@ -1,15 +1,17 @@
 mpv-livetweet
 =============
 
-mpv-livetweet is a script for [mpv](http://mpv.io) that takes a screenshot and uploads it to your twitter account.
+**mpv-livetweet** is a script for [mpv](http://mpv.io) that takes a screenshot and uploads it to your twitter account.
 
 mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) library.
 
-Download the script here.
+Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/v0.1.zip).
 
 Usage
 -----
-Drop it in the lua scripts folder (usually `~/.mpv/lua/` or `~/.mpv/scripts/`), configure it and press `alt+w` to take a screenshot and tweet it.
+  * Drop `mpv-livetweet.lua` in the lua scripts folder (usually `~/.mpv/lua/` or `~/.mpv/scripts/`)
+  * Configure it (see below)
+  * Press `alt+w` to take a screenshot and tweet it
 
 Installation
 ------------
@@ -24,7 +26,7 @@ If that somehow doesn't work (it didn't for me), try
 luarocks install luatwit '--only-server=http://luarocks.org/repositories/rocks-scm'
 ```
 
-### Authenticating
+### Authentication
 Run get_keys.lua and follow the instructions to get your OAuth keys.
 
 ```
@@ -40,7 +42,17 @@ user_id 99999999
 ```
 Save the oauth_token and oauth_token_secret somewhere.
 
-### Configuring
+### Configuration
 Open the script with your editor and paste the oauth_token and oauth_token_secret where it tells you to.
 
-Change the keybind to whatever you want and edit the folder to place the temp file in if needed.
+Change the keybind to whatever you want and edit the folder to place the temp file in if needed. You can also edit the message.
+
+TODO
+----
+  * Make the script auto-detect the name of the anime you're watching and tweet with the respective hashtag
+
+----
+
+**Warning**: might cause rectal pains to your followers. Use at own risk.
+
+Written by [@steinuil](https://twitter.com/steinuil)
