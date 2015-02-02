@@ -1,6 +1,5 @@
 mpv-livetweet
 =============
-
 **mpv-livetweet** is a script for [mpv](http://mpv.io) that takes a screenshot and uploads it to your twitter account.
 
 mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) library.
@@ -9,9 +8,9 @@ Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/v0.
 
 Usage
 -----
-  * Drop `mpv-livetweet.lua` in the lua scripts folder (usually `~/.mpv/lua/` or `~/.mpv/scripts/`)
-  * Configure it (see below)
-  * Press `alt+w` to take a screenshot and tweet it
+  1. Drop `mpv-livetweet.lua` in the lua scripts folder (usually `~/.mpv/lua/` or `~/.mpv/scripts/`)
+  2. Configure it (see below)
+  3. Press `alt+w` to take a screenshot and tweet it
 
 Installation
 ------------
@@ -49,10 +48,14 @@ Change the keybind to whatever you want and edit the folder to place the temp fi
 
 TODO
 ----
-  * Make the script auto-detect the name of the anime you're watching and tweet with the respective hashtag
+  * Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
+  * Integrate the AniList DB to retrieve said hashtag.
+  * Add a window or something to write the text for the tweet. This is kind of a pain in the arse since the tk one is not maintained anymore, and the other toolkits are bloated as fuck (as usual).
+  * Add support for multiple screenshots.
 
 ----
+Confirmed to work on ***my*** computer™.
 
-**Warning**: might cause rectal pains to your followers. Use at own risk.
+**Warning**: might cause rectal pains to your followers. Use at your own risk.
 
 Written by [@steinuil](https://twitter.com/steinuil)
