@@ -11,6 +11,16 @@ Usage
   1. Drop `mpv-livetweet.lua` in the lua scripts folder (usually `~/.mpv/lua/` or `~/.mpv/scripts/`)
   2. Configure it (see below)
   3. Press `alt+w` to take a screenshot and tweet it
+  
+### OS X
+  1. Compile the AppleScript with `osacompile`
+
+	```
+	osacompile -o print-to-stdout.scpt print-to-stdout.applescript
+	```
+  2. Move `mpv-livetweet.lua` and `print-to-stdout.scpt` into `~/.mpv/lua` (create it if it doesn't exist)
+  3. Configure it (see below)
+  4. Press `alt+w` to tweet a screenshot and `alt+t` to tweet a screenshot with some text
 
 Installation
 ------------
@@ -44,13 +54,13 @@ Save the oauth_token and oauth_token_secret somewhere.
 ### Configuration
 Open the script with your editor and paste the oauth_token and oauth_token_secret where it tells you to.
 
-Change the keybind to whatever you want and edit the folder to place the temp file in if needed. You can also edit the message.
+Change the keybind to whatever you want and edit the folder to place the temp file in if needed.
 
 TODO
 ----
   * Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
   * Integrate the AniList DB to retrieve said hashtag.
-  * Add a window or something to write the text for the tweet. This is kind of a pain in the arse since the tk one is not maintained anymore, and the other toolkits are bloated as fuck (as usual).
+  * Add a window or something to write the text for the tweet for Linux and Windows, preferably something cross-platform that fixes the shitty Mac hack too.
   * Add support for multiple screenshots.
 
 ----
