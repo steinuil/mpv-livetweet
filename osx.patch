@@ -1,0 +1,41 @@
+--- ./mpv-livetweet.lua	2015-02-06 22:37:52.000000000 +0100
++++ ./mpv-lvtwt.lua	2015-02-06 22:42:35.000000000 +0100
+@@ -2,6 +2,7 @@
+ oauth-token = "Paste the oauth_token key here"
+ oauth-token-secret = "Paste the oauth_token_secret key here"
+ shot = "/tmp/shot.png"
++body = "/tmp/text"
+ 
+ -- Script
+ local twitter = require 'luatwit'
+@@ -32,4 +33,30 @@
+ 	mp.osd_message("Screenshot tweeted!")
+ end
+ 
++function tweet-with-text()
++	mp.resume()
++	mp.commandv("screenshot_to_file", shot, "video")
++	local file = io.open(shot)
++	local img_data = file:read("*a")
++	file:close()
++	os.remove(shot)
++
++	os.execute("/usr/bin/osascript $HOME/.mpv/lua/print-to-stdout.scpt >" .. body)
++	local body = io.open(body)
++	local text = body:read("*a")
++	body:close()
++	os.remove(body)
++	mp.resume()
++
++	local client = twitter.new(keys)
++	local tw, headers = client:tweet_with_media{
++		status = text, ["media[]"] = {
++			filename = shot,
++			data = img_data,
++		},
++	}
++	mp.osd_message("Screenshot tweeted!")
++end
++
+ mp.add_key_binding("alt+w", "tweet", function() tweet() end)
++mp.add_key_binding("shift+alt+w", "tweet_with_text", function() tweet-with-text() end)

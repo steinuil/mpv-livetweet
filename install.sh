@@ -18,6 +18,10 @@ fi
 echo "Acquiring keys..."
 /usr/local/bin/lua get_keys.lua
 
+printf "Patching script for OS X... "
+patch mpv-livetweet.lua < osx.patch
+echo "Done"
+
 echo "Opening script for editing, paste the oauth_token and oauth_token_secret you got in the previous step where it tells you to."
 /usr/bin/open -e mpv-livetweet.lua
 read -n1 -rsp "Save the file and press any key to continue... " key

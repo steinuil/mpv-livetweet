@@ -1,9 +1,7 @@
 -- Options
 oauth-token = "Paste the oauth_token key here"
 oauth-token-secret = "Paste the oauth_token_secret key here"
-keybind = "alt+w"
 shot = "/tmp/shot.png"
-text = ""
 
 -- Script
 local twitter = require 'luatwit'
@@ -26,12 +24,12 @@ function tweet()
 
 	local client = twitter.new(keys)
 	local tw, headers = client:tweet_with_media{
-		status = text, ["media[]"] = {
+		status = "", ["media[]"] = {
 			filename = shot,
 			data = img_data,
 		},
 	}
-	mp.osd_message("Screenshot tweeted!", 5)
+	mp.osd_message("Screenshot tweeted!")
 end
 
-mp.add_key_binding(keybind, "tweet", function() tweet() end)
+mp.add_key_binding("alt+w", "tweet", function() tweet() end)
