@@ -1,10 +1,9 @@
 #!/bin/sh
 
-LUADIR=$HOME/.mpv/lua/
+LUADIR=$HOME/.mpv/lua
+BASEDIR=$(dirname $0)
 
-printf "Compiling AppleScript... "
-/usr/bin/osacompile -o "print-to-stdout.scpt" "print-to-stdout.applescript"
-echo "Done"
+cd $BASEDIR
 
 echo "Checking for scripts directory..."
 if [ ! -d $LUADIR ]; then
@@ -14,6 +13,10 @@ if [ ! -d $LUADIR ]; then
 else
 	echo "Directory found."
 fi
+
+printf "Compiling AppleScript... "
+/usr/bin/osacompile -o "print-to-stdout.scpt" "$LUADIR/print-to-stdout.applescript"
+echo "Done"
 
 echo "Acquiring keys..."
 /usr/local/bin/lua get_keys.lua
@@ -28,6 +31,5 @@ read -n1 -rsp "Save the file and press any key to continue... " key
 printf "\n"
 
 printf "Moving files to the scripts directory... "
-mv "print-to-stdout.scpt" $LUADIR
 mv "mpv-livetweet.lua" $LUADIR
 echo "Done"
