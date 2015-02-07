@@ -54,7 +54,7 @@ TODO
   * Add support for multiple screenshots.
 
 ----
--> ![image](http://www.wiliam.com.au/content/upload/blog/worksonmymachine.jpg) <-
+![image](http://www.wiliam.com.au/content/upload/blog/worksonmymachine.jpg)
 
 **Warning**: might cause rectal pains to your followers. Use at your own risk.
 
