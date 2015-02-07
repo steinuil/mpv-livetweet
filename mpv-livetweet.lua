@@ -16,7 +16,7 @@ local keys = {
 
 function tweet()
 	mp.resume()
-	mp.commandv("screenshot_to_file", shot, "video")
+	mp.commandv("screenshot_to_file", shot, "subtitles")
 	local file = io.open(shot)
 	local img_data = file:read("*a")
 	file:close()

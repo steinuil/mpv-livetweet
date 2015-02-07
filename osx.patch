@@ -1,5 +1,5 @@
---- ./mpv-livetweet.lua	2015-02-06 22:37:52.000000000 +0100
-+++ ./mpv-lvtwt.lua	2015-02-06 22:42:35.000000000 +0100
+--- ./mpv-livetweet.lua	2015-02-07 02:13:30.000000000 +0100
++++ ./mpvlvtwt.lua	2015-02-07 02:16:23.000000000 +0100
 @@ -2,6 +2,7 @@
  oauth-token = "Paste the oauth_token key here"
  oauth-token-secret = "Paste the oauth_token_secret key here"
@@ -14,7 +14,7 @@
  
 +function tweet-with-text()
 +	mp.resume()
-+	mp.commandv("screenshot_to_file", shot, "video")
++	mp.commandv("screenshot_to_file", shot, "subtitles")
 +	local file = io.open(shot)
 +	local img_data = file:read("*a")
 +	file:close()
