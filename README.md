@@ -7,7 +7,7 @@ mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) lib
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/v0.2.1-osx.zip).
 
 Installation
------
+------------
 Install [LuaTwit](https://github.com/darkstalker/LuaTwit) with [luarocks](luarocks.org):
 
 ```
@@ -54,7 +54,7 @@ TODO
   * Add support for multiple screenshots.
 
 ----
-Works on ***my*** machine™.
+-> ![image](http://www.wiliam.com.au/content/upload/blog/worksonmymachine.jpg) <-
 
 **Warning**: might cause rectal pains to your followers. Use at your own risk.
 
