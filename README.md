@@ -54,7 +54,7 @@ TODO
   * Add support for multiple screenshots.
 
 ----
-Confirmed to work on ***my*** computer™.
+Works on ***my*** machine™.
 
 **Warning**: might cause rectal pains to your followers. Use at your own risk.
 
