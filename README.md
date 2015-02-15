@@ -4,7 +4,7 @@ mpv-livetweet
 
 mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) library.
 
-Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/v0.2.1-osx.zip).
+Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/v0.2.2.zip).
 
 Installation
 ------------
