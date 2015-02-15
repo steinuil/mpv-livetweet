@@ -1,41 +1,45 @@
---- ./mpv-livetweet.lua	2015-02-07 02:13:30.000000000 +0100
-+++ ./mpvlvtwt.lua	2015-02-07 02:16:23.000000000 +0100
-@@ -2,6 +2,7 @@
- oauth-token = "Paste the oauth_token key here"
- oauth-token-secret = "Paste the oauth_token_secret key here"
- shot = "/tmp/shot.png"
-+body = "/tmp/text"
- 
- -- Script
- local twitter = require 'luatwit'
-@@ -32,4 +33,30 @@
- 	mp.osd_message("Screenshot tweeted!")
- end
- 
-+function tweet-with-text()
-+	mp.resume()
-+	mp.commandv("screenshot_to_file", shot, "subtitles")
-+	local file = io.open(shot)
-+	local img_data = file:read("*a")
-+	file:close()
-+	os.remove(shot)
-+
-+	os.execute("/usr/bin/osascript $HOME/.mpv/lua/print-to-stdout.scpt >" .. body)
-+	local body = io.open(body)
-+	local text = body:read("*a")
-+	body:close()
-+	os.remove(body)
-+	mp.resume()
-+
-+	local client = twitter.new(keys)
-+	local tw, headers = client:tweet_with_media{
-+		status = text, ["media[]"] = {
-+			filename = shot,
-+			data = img_data,
-+		},
-+	}
-+	mp.osd_message("Screenshot tweeted!")
-+end
-+
- mp.add_key_binding("alt+w", "tweet", function() tweet() end)
-+mp.add_key_binding("shift+alt+w", "tweet_with_text", function() tweet-with-text() end)
+*** mpv-livetweet.lua	2015-02-15 17:02:23.000000000 +0100
+--- ./mpv-livetweet-osx.lua	2015-02-15 16:59:15.000000000 +0100
+*************** token = "Paste the oauth_token key here"
+*** 3,8 ****
+--- 3,9 ----
+  token_secret = "Paste the oauth_token_secret key here"
+  
+  shot = "/tmp/shot.png"	-- edit this only if you're using windows
++ text = "/tmp/text"
+  
+  -- Script
+  local twitter = require 'luatwit'
+*************** function tweet()
+*** 34,37 ****
+--- 35,64 ----
+  	mp.osd_message("Screenshot tweeted!")
+  end
+  
++ function tweetwithtext()
++ 	mp.commandv("screenshot_to_file", shot, "subtitles")
++ 	local openshot = io.open(shot)
++ 	local img_data = openshot:read("*a")
++ 	openshot:close()
++ 	os.remove(shot)
++ 
++ 	os.execute("/usr/bin/osascript $HOME/.mpv/lua/print-to-stdout.scpt >" .. text)
++ 	local opentext = io.open(text)
++ 	local body = opentext:read("*a")
++ 	opentext:close()
++ 	os.remove(text)
++ 
++ 	mp.resume()
++ 
++ 	local client = twitter.new(keys)
++ 	local tw, headers = client:tweet_with_media{
++ 		status = body, ["media[]"] = {
++ 			filename = shot,
++ 			data = img_data,
++ 		},
++ 	}
++ 	mp.osd_message("Screenshot tweeted!")
++ end
++ 
+  mp.add_key_binding("alt+w", "tweet", function() tweet() end)
++ mp.add_key_binding("shift+alt+w", "tweet_with_text", function() tweetwithtext() end)
