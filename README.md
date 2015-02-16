@@ -1,6 +1,8 @@
 mpv-livetweet
 =============
-**mpv-livetweet** is a script for [mpv](http://mpv.io) that takes a screenshot and uploads it to your twitter account.
+Be that dick who tweets screenshots of their favourite anime spoiling everyone **without even having to leave your player!**
+
+> *"It's like Skyrim with a share button."* - **Kevic Adams**
 
 mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) library.
 
@@ -69,6 +71,7 @@ Stop having shit taste.
 
 TODO
 ----
+  * Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
   * Make the script more verbose.
   * Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
   * Integrate the AniList DB to retrieve said hashtag.
