@@ -6,7 +6,7 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) library.
 
-Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/v0.2.2.zip).
+Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
 Installation
 ------------
