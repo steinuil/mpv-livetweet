@@ -20,6 +20,7 @@ If that somehow doesn't work (it didn't for me), try
 ```
 luarocks install luatwit '--only-server=http://luarocks.org/repositories/rocks-scm'
 ```
+If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit/tree/master/src), download all those files and 
   
 ### OS X
   * Run install.sh and follow the instructions
@@ -45,8 +46,8 @@ luarocks install luatwit '--only-server=http://luarocks.org/repositories/rocks-s
 	```
   * Open the script with an editor and paste the oauth_token and oauth_token_secret *enclosed in double quotes* where it tells you to.
     * Change the temp directory values if needed.
-  * Drop `mpv-livetweet.lua` in the lua scripts folder (usually `~/.mpv/lua/` or `~/.mpv/scripts/`)
-  * Press `alt+w` to take a screenshot and tweet it
+  * Drop `mpv-livetweet.lua` in the lua scripts folder (`~/.mpv/lua/` in mpv 0.7 and older,`~/.mpv/scripts/` in mpv 0.8 and newer).
+  * Press `alt+w` to take a screenshot and tweet it.
 
 Troubleshooting
 ---------------
@@ -75,12 +76,13 @@ TODO
   * Make the script more verbose.
   * Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
   * Integrate the AniList DB to retrieve said hashtag.
-  * Add a window or something to write the text for the tweet for Linux and Windows, preferably something cross-platform that fixes the shitty Mac hack too.
+  * Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux.
+    * Come up with something similar for Windows. Maybe a simple C# program?
   * Add support for multiple screenshots.
 
 ----
 ![image](http://www.wiliam.com.au/content/upload/blog/worksonmymachine.jpg)
 
-**Warning**: might cause rectal pains to your followers. Use at your own risk.
+If it doesn't work on yours, file an issue or bug me on twitter [@steinuil](https://twitter.com/steinuil)
 
-Written by [@steinuil](https://twitter.com/steinuil)
+**Warning**: might cause rectal pains to your followers. Use at your own risk.

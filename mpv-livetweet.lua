@@ -1,8 +1,6 @@
--- Options
-token = "Paste the oauth_token key here"
-token_secret = "Paste the oauth_token_secret key here"
-
-shot = "/tmp/shot.png"	-- edit this only if you're using windows
+-- Credentials
+token = "Paste your oauth_token key here"
+token_secret = "Paste your oauth_token_secret key here"
 
 -- Script
 local twitter = require 'luatwit'
@@ -16,6 +14,8 @@ local keys = {
 }
 
 function tweet()
+	local shot = os.tmpname()
+	os.remove(shot)
 	mp.commandv("screenshot_to_file", shot, "subtitles")
 	local openshot = io.open(shot)
 	local img_data = openshot:read("*a")

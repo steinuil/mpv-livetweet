@@ -14,16 +14,12 @@ else
 	echo "Directory found."
 fi
 
-printf "Compiling AppleScript... "
-/usr/bin/osacompile -o "$LUADIR/print-to-stdout.scpt" "print-to-stdout.applescript"
-echo "Done"
-
 printf "Patching script for OS X... "
 patch mpv-livetweet.lua < osx.patch
 echo "Done"
 
 echo "Acquiring keys..."
-/usr/local/bin/lua get_keys.lua
+lua get_keys.lua
 
 echo "Opening script for editing, paste the oauth_token and oauth_token_secret you got in the previous step where it tells you to."
 /usr/bin/open -e mpv-livetweet.lua
