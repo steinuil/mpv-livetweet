@@ -20,7 +20,7 @@ If that somehow doesn't work (it didn't for me), try
 ```
 luarocks install luatwit '--only-server=http://luarocks.org/repositories/rocks-scm'
 ```
-If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit/tree/master/src), download all those files and stick them in your LUA_PATH (`/usr/local/share/lua/5.2/` for me)
+If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit), download all the files in the `src` folder and stick them in your **LUA_PATH**[^1] (`/usr/local/share/lua/5.2/` for me)
   
 ### OS X
   * Run install.sh and follow the instructions
@@ -72,13 +72,13 @@ Stop having shit taste.
 
 TODO
 ----
-  * Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
-  * Make the script more verbose.
-  * Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
-  * Integrate the AniList DB to retrieve said hashtag.
-  * Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux.
+  - [ ] Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
+  - [ ] Make the script more verbose.
+  - [ ] Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
+  - [ ] Integrate the AniList DB to retrieve said hashtag.
+  - [ ] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux.
     * Come up with something similar for Windows. Maybe a simple C# program?
-  * Add support for multiple screenshots.
+  - [ ] Add support for multiple screenshots.
 
 ----
 ![image](http://www.wiliam.com.au/content/upload/blog/worksonmymachine.jpg)
