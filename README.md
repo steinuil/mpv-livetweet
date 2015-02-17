@@ -20,7 +20,7 @@ If that somehow doesn't work (it didn't for me), try
 ```
 luarocks install luatwit '--only-server=http://luarocks.org/repositories/rocks-scm'
 ```
-If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit/tree/master/src), download all those files and 
+If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit/tree/master/src), download all those files and stick them in your LUA_PATH (`/usr/local/share/lua/5.2/` for me)
   
 ### OS X
   * Run install.sh and follow the instructions
