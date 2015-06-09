@@ -20,13 +20,14 @@ local keys = {
 
 function send(img_name, img_data, body)
 	local client = luatwit.api.new(keys)
-	local tw, headers = client:tweet_with_media{
-		status = body, ["media[]"] = { filename = img_name, data = img_data }
+	local media, err = client:upload_media {
+		filename = img_name, data = img_data
 	}
+	tw, err = media:tweet { status = body }
 end
 
 function tweet(text)
-	local img_name = os.tmpname()
+	local img_name = os.tmpname() .. ".png"
 	os.remove(img_name)
 	mp.commandv("screenshot_to_file", img_name, "subtitles")
 	local open_img = io.open(img_name)
