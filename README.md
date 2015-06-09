@@ -1,7 +1,7 @@
+# Some library this script depends on decided to fuck up in luarocks so I currently have no means to test this, the script is probably broken.**
+
 mpv-livetweet
 =============
-**Some library this script depends on decided to fuck up in luarocks so I currently have no means to test this, the script is probably broken.**
-
 Be that dick who tweets screenshots of their favourite anime spoiling everyone **without even having to leave your player!**
 
 > *"It's like Skyrim with a share button."* - **Kevic Adams**
