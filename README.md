@@ -1,40 +1,24 @@
 mpv-livetweet
 =============
+**Some library this script depends on decided to fuck up in luarocks so I currently have no means to test this, the script is probably broken.**
+
 Be that dick who tweets screenshots of their favourite anime spoiling everyone **without even having to leave your player!**
 
 > *"It's like Skyrim with a share button."* - **Kevic Adams**
 
-mpv-livetweet requires the [luatwit](https://github.com/darkstalker/LuaTwit) library.
-
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
+
+mpv-livetweet requires the
+### Requirements
+  * [luatwit](https://github.com/darkstalker/LuaTwit)
+  * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
 
 Installation
 ------------
-Install [LuaTwit](https://github.com/darkstalker/LuaTwit) with [luarocks](luarocks.org):
-
-```
-luarocks install luatwit
-```
-If that somehow doesn't work (it didn't for me), try
-
-```
-luarocks install luatwit '--only-server=http://luarocks.org/repositories/rocks-scm'
-```
-If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit), download all the files in the `src` folder and stick them in your **LUA_PATH**[^1] (`/usr/local/share/lua/5.2/` for me)
-  
-### OS X
-  * Run install.sh and follow the instructions
+  * Run `get-keys.lua` and follow the instructions to get your OAuth keys.
 
 	```
-	sh install.sh
-	```
-  * Press **⌥W** to tweet a screenshot and **⇧⌥W** to tweet a screenshot with text.
-
-### Other systems
-  * Run get_keys.lua and follow the instructions to get your OAuth keys.
-
-	```
-	lua get_keys.lua
+	lua get-keys.lua
 	```
 	The keys should be printed on the console. It should look like this:
 
@@ -44,28 +28,17 @@ If that *still* doesn't work, go [here](https://github.com/darkstalker/LuaTwit),
 	oauth_token_secret      AIUSUMAOoq983092874bibiuwewqlknjSUXt
 	user_id 99999999
 	```
-  * Open the script with an editor and paste the oauth_token and oauth_token_secret *enclosed in double quotes* where it tells you to.
-    * Change the temp directory values if needed.
-  * Drop `mpv-livetweet.lua` in the lua scripts folder (`~/.mpv/lua/` in mpv 0.7 and older,`~/.mpv/scripts/` in mpv 0.8 and newer).
-  * Press `alt+w` to take a screenshot and tweet it.
+  * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
+  * Uncomment the line matching your OS, save and close the script.
+  * Move `mpv-livetweet.lua` to `~/.mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
+  * Press `alt+w` to tweet a screenshot and `shift+alt+w` to tweet a screenshot with text.
 
 Troubleshooting
 ---------------
-This script isn't exactly idiot-proof so if something doesn't work you'll either have to ask me or `${favourite-search-engine}` it and figure it out yourself.
-
-### I can't install luarocks!
-dunno lol
+This script isn't exactly idiot-proof so if something doesn't work you'll either have to ask me or `#{favourite-search-engine}` it and figure it out yourself.
 
 ### The `get_keys.lua` script throws an error!
 Please follow the instructions ***thoroughly***.
-
-### When I start mpv it throws a bunch of errors in the console about luatwit!
-Your luatwit installation is probably missing some files. Try to figure out where it's installed (for me it's `/usr/local/share/lua/5.2/`) and make sure all the files listed [in this folder](https://github.com/darkstalker/LuaTwit/tree/master/src) are in yours.
-
-### The script tells me it tweeted the screenshot but nothing's happening!
-Either your tokens are wrong or something weird's happening on twitter's side. Run `get_keys.lua` again, update your credentials and try again.
-
-I'll try to make the script more aware of this kind of stuff so you don't have to curse at it too much.
 
 ### I just tweeted a hundred thousand screenshots while watching SaeKano and now my followers are halved!
 Stop having shit taste.
@@ -76,8 +49,8 @@ TODO
   - [ ] Make the script more verbose.
   - [ ] Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
   - [ ] Integrate the AniList DB to retrieve said hashtag.
-  - [ ] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux.
-    * Come up with something similar for Windows. Maybe a simple C# program?
+  - [X] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux.
+    * [X] Come up with something similar for Windows. Maybe a simple C# program?
   - [ ] Add support for multiple screenshots.
 
 ----
@@ -85,4 +58,4 @@ TODO
 
 If it doesn't work on yours, file an issue or bug me on twitter [@steinuil](https://twitter.com/steinuil)
 
-**Warning**: might cause rectal pains to your followers. Use at your own risk.
+**Warning**: might cause anal pain to your followers. Use at your own risk.

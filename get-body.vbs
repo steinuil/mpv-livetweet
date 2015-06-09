@@ -1,0 +1,1 @@
+WScript.StdOut.Write(InputBox("", "Tweet body"))
