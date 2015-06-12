@@ -3,13 +3,13 @@ token = "Paste your oauth_token key here"
 token_secret = "Paste your oauth_token_secret key here"
 
 -- OS (remove the "--" in front of the line that matches your OS)
---local os = "osx"
---local os = "windows"
---local os = "nix"
+--local os_name = "osx"
+--local os_name = "windows"
+--local os_name = "nix"
 
 -- Script
-require 'luatwit'
-require 'mp.utils'
+local twitter = require 'luatwit'
+local utils = require 'luatwit.util'
 
 local keys = {
 	consumer_key = "7svu0BZBvEqCuA3XbCUbXoHPA",
@@ -19,11 +19,11 @@ local keys = {
 }
 
 function send(img_name, img_data, body)
-	local client = luatwit.api.new(keys)
-	local media, err = client:upload_media {
-		filename = img_name, data = img_data
+	local client = twitter.api.new(keys)
+	local media, err = client:upload_media{
+		media = assert(utils.attach_file(img_name))
 	}
-	tw, err = media:tweet { status = body }
+	local tw, err = media:tweet{ status = body }
 end
 
 function tweet(text)
@@ -33,27 +33,35 @@ function tweet(text)
 	local open_img = io.open(img_name)
 	local img_data = open_img:read("*a")
 	open_img:close()
-	os.remove(img_name)
 
-	if text and os ~= "windows" then
-		if os == "nix" then
-			local text_in = io.popen('zenity --title mpv-livetweet --entry --text "Tweet body"')
-		elseif os == "osx" then
-			local text_in = io.popen('/usr/bin/osascript -e \'tell application "mpv" to set tweet to text returned of (display dialog "" with title "Tweet body" default answer "" buttons "Tweet" default button 1)\' -e \'do shell script "echo " & quoted form of tweet\'')
-		--elseif os == "windows" then
-		--	local text_in = io.popen('cscript //B //Nologo get-body.vbs')
+	if text then
+		if os_name == "nix" then
+			text_in = io.popen('zenity --title mpv-livetweet ' ..
+			                   '--entry --text "Tweet body"')
+		elseif os_name == "osx" then
+			text_in = io.popen('/usr/bin/osascript -e \'tell ' ..
+				'application "mpv" to set tweet to text returned of' ..
+				' (display dialog "" with title "Tweet body" default' ..
+				' answer "" buttons "Tweet" default button 1)\' -e \'do ' ..
+				'shell script "echo " & quoted form of tweet\'')
+		elseif os_name == "windows" then
+			text_in = io.popen('cscript //B //Nologo get-body.vbs')
 		end
 
-		local body = text_in:read("*a")
+		body = text_in:read("*a")
 		text_in:close()
 	else
-		local body = ""
+		body = ""
 	end
 
 	mp.resume()
 	send(img_name, img_data, body)
+	os.remove(img_name)
 	mp.osd_message("Screenshot tweeted!")
 end
 
-mp.add_key_binding("alt+w", "tweet", tweet(true))
-mp.add_key_binding("shift+alt+w", "tweet_with_text", tweet(false))
+function tweet_no_text() tweet(false) end
+function tweet_text() tweet(true) end
+
+mp.add_key_binding("Alt+w", "tweet", tweet_no_text)
+mp.add_key_binding("Shift+Alt+W", "tweet_text", tweet_text)

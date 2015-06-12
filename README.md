@@ -1,5 +1,3 @@
-# Some library this script depends on decided to fuck up in luarocks so I currently have no means to test this, the script is probably broken.**
-
 mpv-livetweet
 =============
 Be that dick who tweets screenshots of their favourite anime spoiling everyone **without even having to leave your player!**
@@ -8,10 +6,11 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
-mpv-livetweet requires the
 ### Requirements
   * [luatwit](https://github.com/darkstalker/LuaTwit)
   * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
+
+`luatwit` does't work on Windows, if I'm not mistaken, so good luck installing it on there. The script itself should work on Windows though, so if you somehow manage to get luatwit working, mpv-livetweet will work as well.
 
 Installation
 ------------
@@ -30,7 +29,7 @@ Installation
 	```
   * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
   * Uncomment the line matching your OS, save and close the script.
-  * Move `mpv-livetweet.lua` to `~/.mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
+  * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
   * Press `alt+w` to tweet a screenshot and `shift+alt+w` to tweet a screenshot with text.
 
 Troubleshooting
@@ -40,8 +39,11 @@ This script isn't exactly idiot-proof so if something doesn't work you'll either
 ### The `get_keys.lua` script throws an error!
 Please follow the instructions ***thoroughly***.
 
-### I just tweeted a hundred thousand screenshots while watching SaeKano and now my followers are halved!
-Stop having shit taste.
+### Lua can't find some of the files in the required libraries!
+Good luck with that. It's a luarocks problem, you should try finding out your package path with `lua -e 'print(package.path)'` and change your `/etc/luarocks/config-5.x.lua` file to match that. Setting the path to `/usr` did it for me, but it may depend on your OS/distro.
+
+### I just tweeted a hundred thousand Onodera screenshots while watching Nisekoi and now my followers are halved!
+Stop being [@nyarth](http://twitter.com/nyarth).
 
 TODO
 ----
@@ -54,7 +56,7 @@ TODO
   - [ ] Add support for multiple screenshots.
 
 ----
-![image](http://www.wiliam.com.au/content/upload/blog/worksonmymachine.jpg)
+![image](http://blog.codinghorror.com/content/images/uploads/2007/03/6a0120a85dcdae970b0128776ff992970c-pi.png)
 
 If it doesn't work on yours, file an issue or bug me on twitter [@steinuil](https://twitter.com/steinuil)
 
