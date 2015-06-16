@@ -30,6 +30,7 @@ Installation
   * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
   * Uncomment the line matching your OS, save and close the script.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
+    * If you're on Windows, mode `get-body.vbs` to the scripts directory too.
   * Press `alt+w` to tweet a screenshot and `shift+alt+w` to tweet a screenshot with text.
 
 Troubleshooting
@@ -48,10 +49,11 @@ Stop being [@nyarth](http://twitter.com/nyarth).
 TODO
 ----
   - [ ] Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
-  - [ ] Make the script more verbose.
-  - [ ] Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
-  - [ ] Integrate the AniList DB to retrieve said hashtag.
-  - [X] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux.
+  - [X] Make the script more verbose.
+  - [ ] Actually check the answer of the server to determine if the screenshot was actually tweeted.
+  - [ ] Auto-detect the name of the anime you're watching and tweet with the respective hashtag. (*man this sounds like pain*)
+  - [ ] Integrate the AniList DB to retrieve said hashtag. (*even more pain*)
+  - [X] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux. (*it uses zenity but whatever*)
     * [X] Come up with something similar for Windows. Maybe a simple C# program?
   - [ ] Add support for multiple screenshots.
 

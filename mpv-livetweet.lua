@@ -18,23 +18,16 @@ local keys = {
 	oauth_token_secret = token_secret
 }
 
-function send(img_name, img_data, body)
-	local client = twitter.api.new(keys)
-	local media, err = client:upload_media{
-		media = assert(utils.attach_file(img_name))
-	}
-	local tw, err = media:tweet{ status = body }
-end
-
 function tweet(text)
-	local img_name = os.tmpname() .. ".png"
-	os.remove(img_name)
+	local file = os.tmpname()
+	os.remove(file) -- os.tmpname() creates the file on some OS
+	local img_name = file .. '.png'
+
 	mp.commandv("screenshot_to_file", img_name, "subtitles")
-	local open_img = io.open(img_name)
-	local img_data = open_img:read("*a")
-	open_img:close()
+	print("Screenshot taken.")
 
 	if text then
+		print("Getting text input...")
 		if os_name == "nix" then
 			text_in = io.popen('zenity --title mpv-livetweet ' ..
 			                   '--entry --text "Tweet body"')
@@ -55,13 +48,18 @@ function tweet(text)
 	end
 
 	mp.resume()
-	send(img_name, img_data, body)
+
+	print("Uploading screenshot...")
+	local client = twitter.api.new(keys)
+	local media, err = client:upload_media{
+		media = assert(utils.attach_file(img_name))
+	}
+	local tw, err = media:tweet{ status = body }
+
 	os.remove(img_name)
 	mp.osd_message("Screenshot tweeted!")
+	print("Screenshot tweeted (probably)")
 end
 
-function tweet_no_text() tweet(false) end
-function tweet_text() tweet(true) end
-
-mp.add_key_binding("Alt+w", "tweet", tweet_no_text)
-mp.add_key_binding("Shift+Alt+W", "tweet_text", tweet_text)
+mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
+mp.add_key_binding("Shift+Alt+W", "tweet_text", function() tweet(true) end)
