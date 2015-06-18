@@ -4,8 +4,7 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 > *"whoa, integrated tweeting in movie players. The relentless march of progress"* - **[@jons520](https://twitter.com/jons520/status/611668022902697984)**
 
-> *"lol straight to twitter
-> your followers probably hate you"* - **ChrisK2**
+> *"lol straight to twitter // your followers probably hate you"* - **ChrisK2**
 
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
