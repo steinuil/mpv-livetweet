@@ -2,7 +2,10 @@ mpv-livetweet
 =============
 Be that dick who tweets screenshots of their favourite anime spoiling everyone **without even having to leave your player!**
 
-> *"It's like Skyrim with a share button."* - **Kevic Adams**
+> *"whoa, integrated tweeting in movie players. The relentless march of progress"* - **[@jons520](https://twitter.com/jons520/status/611668022902697984)**
+
+> *"lol straight to twitter
+> your followers probably hate you"* - **ChrisK2**
 
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
@@ -30,7 +33,7 @@ Installation
   * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
   * Uncomment the line matching your OS, save and close the script.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
-    * If you're on Windows, mode `get-body.vbs` to the scripts directory too.
+    * If you're on Windows, move `get-body.vbs` to the scripts directory too.
   * Press `alt+w` to tweet a screenshot and `shift+alt+w` to tweet a screenshot with text.
 
 Troubleshooting
