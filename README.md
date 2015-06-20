@@ -4,7 +4,7 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 > *"whoa, integrated tweeting in movie players. The relentless march of progress"* - **[@jons520](https://twitter.com/jons520/status/611668022902697984)**
 
-> *"lol straight to twitter // your followers probably hate you"* - **ChrisK2**
+> *"lol straight to twitter, your followers probably hate you"* - **ChrisK2**
 
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
@@ -52,7 +52,7 @@ TODO
 ----
   - [ ] Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
   - [X] Make the script more verbose.
-  - [ ] Actually check the answer of the server to determine if the screenshot was actually tweeted.
+  - [X] Actually check the answer of the server to determine if the screenshot was actually tweeted.
   - [ ] Auto-detect the name of the anime you're watching and tweet with the respective hashtag. (*man this sounds like pain*)
   - [ ] Integrate the AniList DB to retrieve said hashtag. (*even more pain*)
   - [X] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux. (*it uses zenity but whatever*)

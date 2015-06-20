@@ -56,9 +56,15 @@ function tweet(text)
 	}
 	local tw, err = media:tweet{ status = body }
 
+	if err["status"] == "200 OK" then
+		mp.osd_message("Screenshot tweeted!")
+		print("Screenshot tweeted!")
+	else
+		mp.osd_message("Screenshot not tweeted, check the console for errors")
+		print("Something went wrong. Error code: " .. err["status"])
+		for k, v in pairs(err) do print(k .. ": " .. v) end
+	end
 	os.remove(img_name)
-	mp.osd_message("Screenshot tweeted!")
-	print("Screenshot tweeted (probably)")
 end
 
 mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
