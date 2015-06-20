@@ -10,6 +10,8 @@ Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/tex
 
 ### Requirements
   * [luatwit](https://github.com/darkstalker/LuaTwit)
+  * [luasocket](http://w3.impa.br/~diego/software/luasocket/) (`luarocks install luasocket`)
+  * [OAuth](https://github.com/ignacio/LuaOAuth) (`luarocks install oauth`)
   * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
 
 `luatwit` does't work on Windows, if I'm not mistaken, so good luck installing it on there. The script itself should work on Windows though, so if you somehow manage to get luatwit working, mpv-livetweet will work as well.
@@ -53,8 +55,8 @@ TODO
   - [ ] Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
   - [X] Make the script more verbose.
   - [X] Actually check the answer of the server to determine if the screenshot was actually tweeted.
-  - [ ] Auto-detect the name of the anime you're watching and tweet with the respective hashtag. (*man this sounds like pain*)
-  - [ ] Integrate the AniList DB to retrieve said hashtag. (*even more pain*)
+  - [X] Auto-detect the name of the anime you're watching and tweet with the respective hashtag. (*man this sounds like pain*)
+  - [X] Integrate the AniList DB to retrieve said hashtag. (*even more pain*)
   - [X] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux. (*it uses zenity but whatever*)
     * [X] Come up with something similar for Windows. Maybe a simple C# program?
   - [ ] Add support for multiple screenshots.
