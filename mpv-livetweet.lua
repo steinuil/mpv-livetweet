@@ -32,6 +32,7 @@ local anilist_keys = {
 }
 
 function get_anilist_token()
+	print("Obtaining AniList token...")
 	local args = 'grant_type=client_credentials&client_id=' ..
 	             anilist_keys["client_id"] .. '&client_secret=' ..
 				 anilist_keys["client_secret"]
@@ -57,17 +58,20 @@ function get_hashtag()
 
 	local anime_name = mp.get_property("filename")
 	local query = string.gsub(anime_name, "%..*", "")
-	query = string.gsub(query, "%[.-%].?", "")
-	query = string.gsub(query, "%(.-%)", "")
-	query = string.gsub(query, " %d%d ", "")
+	query = string.gsub(query, "_", " ")
+	query = string.gsub(query, "%b[]", "")
+	query = string.gsub(query, "%b()", "")
+	query = string.gsub(query, " %d%d%a?%d? ", "")
 	query = string.gsub(query, "[^a-zA-Z0-9]", " ")
+	query = string.gsub(query, "[sS]pecial[a-zA-Z]?", "")
+	print('Searching for "' .. query .. '"...')
 
 	local request = http.request(prefix .. 'anime/search/' ..
 	                             query .. '?' .. token)
 	local results = json.decode(request)
 	if results == nil then hashtag = ""
 	elseif results["status"] == 401 then
-		print("AniList token expired, getting a new one...")
+		print("AniList token expired.")
 		get_anilist_token()
 		get_hashtag()
 	else

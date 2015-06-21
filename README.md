@@ -4,7 +4,7 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 > *"whoa, integrated tweeting in movie players. The relentless march of progress"* - **[@jons520](https://twitter.com/jons520/status/611668022902697984)**
 
-> *"lol straight to twitter, your followers probably hate you"* - **ChrisK2**
+> *"lol straight to twitter, your followers probably hate you"* - **[ChrisK2](https://github.com/ChrisK2)**
 
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
@@ -33,6 +33,7 @@ Installation
 	```
   * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
   * Uncomment the line matching your OS, save and close the script.
+  * Set the value of `hashtag` to `false` if you don't want it to retrieve a hashtag for the series.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
     * If you're on Windows, move `get-body.vbs` to the scripts directory too.
   * Press `alt+w` to tweet a screenshot and `shift+alt+w` to tweet a screenshot with text.
@@ -54,11 +55,12 @@ TODO
 ----
   - [ ] Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
   - [X] Make the script more verbose.
-  - [X] Actually check the answer of the server to determine if the screenshot was actually tweeted.
-  - [X] Auto-detect the name of the anime you're watching and tweet with the respective hashtag. (*man this sounds like pain*)
-  - [X] Integrate the AniList DB to retrieve said hashtag. (*even more pain*)
-  - [X] Use [yad](https://code.google.com/p/yad/) to display a window for the tweet body on Linux. (*it uses zenity but whatever*)
-    * [X] Come up with something similar for Windows. Maybe a simple C# program?
+    - [X] Actually check the answer of the server to determine if the screenshot was actually tweeted.
+  - [X] Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
+    - [X] Integrate the AniList DB to retrieve said hashtag.
+  - [X] Display a window for the tweet body on Linux.
+    - [X] Come up with something similar for Windows.
+	  - [ ] Integrate the hashtag in the Windows script. Fuck you, CScript.exe.
   - [ ] Add support for multiple screenshots.
 
 ----
