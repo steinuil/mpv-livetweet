@@ -14,6 +14,8 @@ Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/tex
   * [OAuth](https://github.com/ignacio/LuaOAuth) (`luarocks install oauth`)
   * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
 
+Currently only tested on Lua 5.1, should work on 5.2 too. 5.3 is no good since mpv doesn't support it yet.
+
 `luatwit` does't work on Windows, if I'm not mistaken, so good luck installing it on there. The script itself should work on Windows though, so if you somehow manage to get luatwit working, mpv-livetweet will work as well.
 
 Installation

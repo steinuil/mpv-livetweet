@@ -111,7 +111,7 @@ function tweet(text)
 		body = text_in:read("*a")
 		text_in:close()
 	else
-		if search_hashtag and hashtag ~= "" then print("Tweeting with hashtag " .. hashtag)
+		if search_hashtag and hashtag ~= "" then print("Tweeting with hashtag " .. hashtag) end
 		body = hashtag
 	end
 	mp.resume()
