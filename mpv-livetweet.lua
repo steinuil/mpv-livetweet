@@ -5,23 +5,23 @@ token_secret = "Paste your oauth_token_secret here"
 -- OS (remove the "--" in front of the line that matches your OS)
 --local os_name = "osx"
 --local os_name = "windows"
---local os_name = "nix"
+--os_name = "nix"
 
 -- Set to false if you don't want the script to retrieve the hashtag
-local hashtag = true
+search_hashtag = true
 
 -- Script
 local twitter = require 'luatwit'
+local base64 = require 'base64'
 local utils = require 'luatwit.util'
 local http = require 'socket.http'
 local json = require 'dkjson'
 local ltn12 = require 'ltn12'
-local base64 = require 'base64'
 
 local twitter_keys = {
 	consumer_key = "7svu0BZBvEqCuA3XbCUbXoHPA",
-	consumer_secret = base64.decode(
-		'NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTHFRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
+	consumer_secret = base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
+		'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
 	oauth_token = token,
 	oauth_token_secret = token_secret
 }
@@ -32,7 +32,7 @@ local anilist_keys = {
 }
 
 function get_anilist_token()
-	print("Obtaining AniList token...")
+	print("Getting an AniList token...")
 	local args = 'grant_type=client_credentials&client_id=' ..
 	             anilist_keys["client_id"] .. '&client_secret=' ..
 				 anilist_keys["client_secret"]
@@ -55,19 +55,16 @@ function get_hashtag()
 	local prefix = "http://anilist.co/api/"
 	local token = '&access_token=' .. anilist_keys["access_token"]
 	local hashtag = ""
+	local filename = mp.get_property("filename")
+	local ext = "%." .. mp.get_property("file-format")
 
-	local anime_name = mp.get_property("filename")
-	local query = string.gsub(anime_name, "%..*", "")
-	query = string.gsub(query, "_", " ")
-	query = string.gsub(query, "%b[]", "")
-	query = string.gsub(query, "%b()", "")
-	query = string.gsub(query, " %d%d%a?%d? ", "")
-	query = string.gsub(query, "[^a-zA-Z0-9]", " ")
-	query = string.gsub(query, "[sS]pecial[a-zA-Z]?", "")
-	print('Searching for "' .. query .. '"...')
+	local subst = { ext, '%b[]', '%b()', '%d%d%a?%d?', '[sS]pecial[a-zA-Z]?' }
+	local query = filename:gsub('_', " ")
+	for i, v in ipairs(subst) do query = query:gsub(v, "") end
+	for i, v in ipairs({'[^a-zA-Z0-9]','%s+'}) do query = query:gsub(v, " ") end
+	--print('Searching for "' .. query .. '"...')
 
-	local request = http.request(prefix .. 'anime/search/' ..
-	                             query .. '?' .. token)
+	local request = http.request(prefix .. 'anime/search/' ..  query .. '?' .. token)
 	local results = json.decode(request)
 	if results == nil then hashtag = ""
 	elseif results["status"] == 401 then
@@ -75,8 +72,7 @@ function get_hashtag()
 		get_anilist_token()
 		get_hashtag()
 	else
-		local anime_r = http.request(prefix .. 'anime/' ..
-		                             results[1]["id"] .. '?' .. token)
+		local anime_r = http.request(prefix .. 'anime/' ..  results[1]["id"] .. '?' .. token)
 		local anime = json.decode(anime_r)
 		hashtag = anime["hashtag"]
 		if hashtag == nil then hashtag = "" end
@@ -92,28 +88,31 @@ function tweet(text)
 	mp.commandv("screenshot_to_file", img_name, "subtitles")
 	print("Screenshot taken.")
 
-
+	if search_hashtag and old_filename ~= mp.get_property("filename") then hashtag = get_hashtag() end
 	if text then
-		local yolo = ""
-		if hashtag then yolo = get_hashtag() end
 		print("Getting text input...")
 		if os_name == "nix" then
 			text_in = io.popen('zenity --title mpv-livetweet --entry --text' ..
-			                   ' "Tweet body" --entry-text "' .. yolo .. '"')
+			                   ' "Tweet body" --entry-text " ' .. hashtag .. '"')
 		elseif os_name == "osx" then
-			text_in = io.popen('/usr/bin/osascript -e \'tell ' ..
-				'application "mpv" to set tweet to text returned of' ..
-				' (display dialog "" with title "Tweet body" default' ..
-				' answer "' .. yolo .. '" buttons "Tweet" default button 1)\' ' ..
-				'-e \'do shell script "echo " & quoted form of tweet\'')
+			text_in = io.popen('/usr/bin/osascript -e \'tell application "mpv" to set tweet to ' ..
+				'text returned of (display dialog "" with title "Tweet body" default answer " ' ..
+				hashtag .. '" buttons "Tweet" default button 1)\' -e \'do shell script "echo " ' ..
+				'& quoted form of tweet\'')
 		elseif os_name == "windows" then
-			text_in = io.popen('cscript //B //Nologo get-body.vbs')
+			local tmp_file = os.tmpname() .. ".vbs"
+			local open_file = io.open(tmp_file, "w")
+			open_file:write('WScript.StdOut.Write(InputBox(" ' .. hashtag .. '", "Tweet body"))')
+			open_file:close()
+			text_in = io.popen('cscript //B //Nologo ' .. tmp_file)
+			os.remove(tmp_file)
 		end
 
 		body = text_in:read("*a")
 		text_in:close()
 	else
-		body = ""
+		if search_hashtag and hashtag ~= "" then print("Tweeting with hashtag " .. hashtag)
+		body = hashtag
 	end
 	mp.resume()
 
@@ -133,7 +132,11 @@ function tweet(text)
 		for k, v in pairs(err) do print(k .. ": " .. v) end
 	end
 	os.remove(img_name)
+	old_filename = mp.get_property("filename")
 end
+
+old_filename = ""
+hashtag = ""
 
 mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
 mp.add_key_binding("Shift+Alt+W", "tweet_text", function() tweet(true) end)

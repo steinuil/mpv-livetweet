@@ -53,14 +53,13 @@ Stop being [@nyarth](http://twitter.com/nyarth).
 
 TODO
 ----
-  - [ ] Make the script read mail, as per the [law of software envelopment](http://catb.org/jargon/html/Z/Zawinskis-Law.html).
   - [X] Make the script more verbose.
     - [X] Actually check the answer of the server to determine if the screenshot was actually tweeted.
   - [X] Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
     - [X] Integrate the AniList DB to retrieve said hashtag.
   - [X] Display a window for the tweet body on Linux.
     - [X] Come up with something similar for Windows.
-	  - [ ] Integrate the hashtag in the Windows script. Fuck you, CScript.exe.
+	  - [X] Integrate the hashtag in the Windows script. Fuck you, CScript.exe.
   - [ ] Add support for multiple screenshots.
 
 ----
