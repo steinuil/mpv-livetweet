@@ -58,6 +58,14 @@ Installation
 
 You can tweet up to 4 screenshots at once.
 
+If you want to remap the shortcuts, you can do so by adding them to `~/.config/mpv/input.conf`. For example, to remap the "queue screenshot" function to alt+d, add this to your input.conf:
+
+```
+alt+d script_binding mpv-livetweet.queue_screenshot
+```
+
+Replace `queue_screenshot` with the name of the function you want to remap. The functions are `queue_screenshot`, `tweet`, `tweet_with_comment` and `cancel_tweet`.
+
 Troubleshooting
 ---------------
 This script isn't exactly idiot-proof so if something doesn't work you'll either have to ask me or `#{favourite-search-engine}` it and figure it out yourself.

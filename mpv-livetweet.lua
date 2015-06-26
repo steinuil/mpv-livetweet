@@ -116,7 +116,7 @@ function cancel_tweet()
 	end
 end
 
-function add_screenshot()
+function queue_screenshot()
 	if queue == 4 then
 		send("Queue full, screenshot not taken.")
 	else
@@ -135,14 +135,14 @@ function add_screenshot()
 	end
 end
 
-function tweet(text)
-	if queue == 0 then add_screenshot() end
+function tweet(comment)
+	if queue == 0 then queue_screenshot() end
 
 	if search_hashtag and old_filename ~= mp.get_property("filename") then
 		hashtag = get_hashtag()
 	end
 
-	if text then
+	if comment then
 		body = get_text(hashtag)
 	else
 		if search_hashtag and hashtag ~= "" then print("Tweeting with hashtag " .. hashtag) end
@@ -151,7 +151,6 @@ function tweet(text)
 
 	mp.resume()
 
-	print("Uploading screenshot(s)...")
 	local client = twitter.api.new(twitter_keys)
 	media = {}
 	for i = 1, queue do
@@ -177,7 +176,7 @@ end
 
 old_filename, hashtag, queue = "", "", 0
 
-mp.add_key_binding("Alt+a", "add_scrot", function() add_screenshot() end)
+mp.add_key_binding("Alt+a", "queue_screenshot", function() queue_screenshot() end)
 mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
-mp.add_key_binding("Shift+Alt+w", "tweet_with_text", function() tweet(true) end)
+mp.add_key_binding("Shift+Alt+w", "tweet_with_comment", function() tweet(true) end)
 mp.add_key_binding("Shift+Alt+c", "cancel_tweet", function() cancel_tweet() end)
