@@ -44,17 +44,17 @@ Installation
 	user_id 99999999
 	```
   * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
-  * Uncomment the line matching your OS, save and close the script.
-  * Set the value of `search_hashtag` to `false` if you don't want it to retrieve a hashtag for the series.
+  * Uncomment the line matching your OS.
+  * Set the value of `search_hashtag` to `false` if you don't want it to retrieve a hashtag for the series. Save and close the script.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
 
 ### Commands
-| Shortcut        | When queue is empty                 | With screenshots in queue                |
-| --------------- | ----------------------------------- | ---------------------------------------- |
-| **Alt+a**       | Add a screenshot to the queue       | Add a screenshot to queue                |
-| **Alt+w**       | Tweet a single screenshot           | Tweet all screenshots in queue           |
-| **Shift+Alt+w** | Tweet a single screenshot with text | Tweet all screenshots in queue with text |
-| **Shift+Alt+c** | -                                   | Deletes all screenshots in queue         |
+| Shortcut        | When queue is empty                | With screenshots in queue           |
+| --------------- | ---------------------------------- | ----------------------------------- |
+| **Alt+a**       | Queue a screenshot                 | Queue a screenshot                  |
+| **Alt+w**       | Tweet single screenshot            | Tweet queued screenshots            |
+| **Shift+Alt+w** | Tweet single screenshot w/ comment | Tweet queued screenshots w/ comment |
+| **Shift+Alt+c** | -                                  | Delete queued screenshots           |
 
 You can tweet up to 4 screenshots at once.
 
