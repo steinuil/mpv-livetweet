@@ -1,6 +1,6 @@
 -- Credentials
-token = "Paste your oauth_token here"
-token_secret = "Paste your oauth_token_secret here"
+oauth_token = "Paste your oauth_token here"
+oauth_token_secret = "Paste your oauth_token_secret here"
 
 -- OS (remove the "--" in front of the line that matches your OS)
 --os_name = "osx"

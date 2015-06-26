@@ -17,35 +17,20 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
 ### Requirements
-  * lua 5.1/5.2
-  * [luatwit](https://github.com/darkstalker/LuaTwit) (`luarocks install luatwit`)
-  * [luasocket](http://w3.impa.br/~diego/software/luasocket/) (`luarocks install luasocket`)
-  * [OAuth](https://github.com/ignacio/LuaOAuth) (`luarocks install oauth`)
+  * [lua](https://lua.org/) 5.1.x/5.2.x
+  * [luarocks](https://luarocks.org/) >= 2.2.0
+  * [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) (`luarocks install luatwit luasocket`)
   * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
-  * A decent OS (see below)
+  * [A half-decent OS](https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation) (not Windows)
 
 Currently only tested on Lua 5.1, should work on 5.2 too. 5.3 is no good since mpv doesn't support it yet.
 
-`luatwit` does't work on Windows, if I'm not mistaken, so good luck installing it on there. The script itself should work on Windows though, so if you somehow manage to get luatwit working, mpv-livetweet will work as well.
+One of the libraries required by LuaTwit doesn't support Windows, so you won't be able to install the dependencies. If that somehow changes, the script will run without problems.
 
 Installation
 ------------
-  * Run `get-keys.lua` and follow the instructions to get your OAuth keys.
-
-	```
-	lua get-keys.lua
-	```
-	The keys should be printed on the console. It should look like this:
-
-	```
-	screen_name     steinuil
-	oauth_token     dasklhdnmpunexoibrunkljdsflkj191919409
-	oauth_token_secret      AIUSUMAOoq983092874bibiuwewqlknjSUXt
-	user_id 99999999
-	```
-  * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
-  * Uncomment the line matching your OS.
-  * Set the value of `search_hashtag` to `false` if you don't want it to retrieve a hashtag for the series. Save and close the script.
+  * Run `lua get-keys.lua` and follow the instructions to get your OAuth keys. Save the keys somewhere safe.
+  * Open `mpv-livetweet.lua` in your favourite text editor to configure it.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
 
 ### Commands
@@ -68,10 +53,7 @@ Replace `queue_screenshot` with the name of the function you want to remap. The 
 
 Troubleshooting
 ---------------
-This script isn't exactly idiot-proof so if something doesn't work you'll either have to ask me or `#{favourite-search-engine}` it and figure it out yourself.
-
-### The `get_keys.lua` script throws an error!
-Please follow the instructions ***thoroughly***.
+If you did everything right, the script should work. If you still have problems, add an issue on here or fire me a question on [twitter](https://twitter.com/steinuil).
 
 ### Lua can't find some of the files in the required libraries!
 Good luck with that. It's a luarocks problem, you should try finding out your package path with `lua -e 'print(package.path)'` and change your `/etc/luarocks/config-5.x.lua` file to match that. Setting the path to `/usr` did it for me, but it may depend on your OS/distro.
@@ -96,4 +78,4 @@ TODO
 
 If it doesn't work on yours, file an issue or bug me on twitter [@steinuil](https://twitter.com/steinuil)
 
-**Warning**: might cause anal pain to your followers. Use at your own risk.
+Excessive use of the script might cause butthurt and follower loss. Use responsibly and in small doses.
