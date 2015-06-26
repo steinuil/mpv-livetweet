@@ -3,14 +3,14 @@ token = "Paste your oauth_token here"
 token_secret = "Paste your oauth_token_secret here"
 
 -- OS (remove the "--" in front of the line that matches your OS)
---local os_name = "osx"
---local os_name = "windows"
+--os_name = "osx"
+--os_name = "windows"
 --os_name = "nix"
 
 -- Set to false if you don't want the script to retrieve the hashtag
 search_hashtag = true
 
--- Script
+-- Script - don't change anything below this point
 local twitter = require 'luatwit'
 local base64 = require 'base64'
 local utils = require 'luatwit.util'
@@ -32,7 +32,7 @@ local anilist_keys = {
 }
 
 function get_anilist_token()
-	print("Getting an AniList token...")
+	print("Getting AniList token...")
 	local args = 'grant_type=client_credentials&client_id=' ..
 	             anilist_keys["client_id"] .. '&client_secret=' ..
 				 anilist_keys["client_secret"]
@@ -52,27 +52,27 @@ end
 function get_hashtag()
 	if anilist_keys["access_token"] == nil then get_anilist_token() end
 
-	local prefix = "http://anilist.co/api/"
+	local prefix = "http://anilist.co/api/anime/"
 	local token = '&access_token=' .. anilist_keys["access_token"]
 	local hashtag = ""
-	local filename = mp.get_property("filename")
+	local query = mp.get_property("filename")
 	local ext = "%." .. mp.get_property("file-format")
 
 	local subst = { ext, '%b[]', '%b()', '%d%d%a?%d?', '[sS]pecial[a-zA-Z]?' }
-	local query = filename:gsub('_', " ")
 	for i, v in ipairs(subst) do query = query:gsub(v, "") end
-	for i, v in ipairs({'[^a-zA-Z0-9]','%s+'}) do query = query:gsub(v, " ") end
+	for i, v in ipairs({'_','[^a-zA-Z0-9]','%s+'}) do query = query:gsub(v, " ") end
 	--print('Searching for "' .. query .. '"...')
 
-	local request = http.request(prefix .. 'anime/search/' ..  query .. '?' .. token)
+	local request = http.request(prefix .. 'search/' ..  query .. '?' .. token)
 	local results = json.decode(request)
-	if results == nil then hashtag = ""
+	if results == nil then
+		hashtag = ""
 	elseif results["status"] == 401 then
 		print("AniList token expired.")
 		get_anilist_token()
 		get_hashtag()
 	else
-		local anime_r = http.request(prefix .. 'anime/' ..  results[1]["id"] .. '?' .. token)
+		local anime_r = http.request(prefix ..  results[1]["id"] .. '?' .. token)
 		local anime = json.decode(anime_r)
 		hashtag = anime["hashtag"]
 		if hashtag == nil then hashtag = "" end
@@ -80,63 +80,104 @@ function get_hashtag()
 	return hashtag
 end
 
-function tweet(text)
-	local file = os.tmpname()
-	os.remove(file) -- os.tmpname() creates the file on some OS
-	local img_name = file .. '.png'
+function get_text(hashtag)
+	print("Getting text input...")
+	if os_name == "nix" then
+		command = 'zenity --title mpv-livetweet --entry --text "Tweet body" ' ..
+		'--entry-text " ' .. hashtag .. '"'
+	elseif os_name == "osx" then
+		command = 'osascript -e \'tell application "mpv" to set tweet to text returned of (disp' ..
+			'lay dialog "" with title "Tweet body" default answer " ' .. hashtag .. '" buttons ' ..
+			'"Tweet" default button 1)\' -e \' do shell script "echo " & quoted form of tweet'
+	elseif os_name == "windows" then
+		tmp_file = os.tmpname() .. ".vbs"
+		local open_file = io.open(tmp_file, "w")
+		open_file:write('WScript.StdOut.Write(InputBox(" ' .. hashtag .. '", "Tweet body"))')
+		open_file:close()
+		command = 'cscript //B //Nologo ' .. tmp_file
+	end
+	local text_in = io.popen(command)
+	if os_name == "windows" then os.remove(tmp_file) end
+	local body = text_in:read("*a")
+	text_in:close()
+	return body
+end
 
-	mp.commandv("screenshot_to_file", img_name, "subtitles")
-	print("Screenshot taken.")
+function send(msg)
+	print(msg)
+	mp.osd_message(msg)
+end
 
-	if search_hashtag and old_filename ~= mp.get_property("filename") then hashtag = get_hashtag() end
-	if text then
-		print("Getting text input...")
-		if os_name == "nix" then
-			text_in = io.popen('zenity --title mpv-livetweet --entry --text' ..
-			                   ' "Tweet body" --entry-text " ' .. hashtag .. '"')
-		elseif os_name == "osx" then
-			text_in = io.popen('/usr/bin/osascript -e \'tell application "mpv" to set tweet to ' ..
-				'text returned of (display dialog "" with title "Tweet body" default answer " ' ..
-				hashtag .. '" buttons "Tweet" default button 1)\' -e \'do shell script "echo " ' ..
-				'& quoted form of tweet\'')
-		elseif os_name == "windows" then
-			local tmp_file = os.tmpname() .. ".vbs"
-			local open_file = io.open(tmp_file, "w")
-			open_file:write('WScript.StdOut.Write(InputBox(" ' .. hashtag .. '", "Tweet body"))')
-			open_file:close()
-			text_in = io.popen('cscript //B //Nologo ' .. tmp_file)
-			os.remove(tmp_file)
+function cancel_tweet()
+	if queue > 0 then
+		send("Deleting screenshots in queue...")
+		for i = 1, queue do os.remove(file .. i .. ".jpg") end
+		queue = 0
+	end
+end
+
+function add_screenshot()
+	if queue == 4 then
+		send("Queue full, screenshot not taken.")
+	else
+		if queue == 0 then
+			file = os.tmpname(); os.remove(file)
 		end
 
-		body = text_in:read("*a")
-		text_in:close()
+		queue = queue + 1
+		mp.commandv("screenshot_to_file", file .. queue .. ".jpg", "subtitles")
+
+		if queue < 4 then
+			send("Added screenshot " .. queue .. " to the queue.")
+		else
+			send("Queue full.")
+		end
+	end
+end
+
+function tweet(text)
+	if queue == 0 then add_screenshot() end
+
+	if search_hashtag and old_filename ~= mp.get_property("filename") then
+		hashtag = get_hashtag()
+	end
+
+	if text then
+		body = get_text(hashtag)
 	else
 		if search_hashtag and hashtag ~= "" then print("Tweeting with hashtag " .. hashtag) end
 		body = hashtag
 	end
+
 	mp.resume()
 
-	print("Uploading screenshot...")
+	print("Uploading screenshot(s)...")
 	local client = twitter.api.new(twitter_keys)
-	local media, err = client:upload_media{
-		media = assert(utils.attach_file(img_name))
-	}
-	local tw, err = media:tweet{ status = body }
+	media = {}
+	for i = 1, queue do
+		send("Uploading screenshot " .. i .. " of " .. queue .. "...")
+		local headers = client:upload_media{
+			media = utils.attach_file(file .. i .. ".jpg")
+		}
+		table.insert(media, headers["media_id_string"])
+	end
+	local tw, err = client:tweet{ media_ids = media, status = body }
 
 	if err["status"] == "200 OK" then
-		mp.osd_message("Screenshot tweeted!")
-		print("Screenshot tweeted!")
+		send("Screenshots tweeted!")
 	else
-		mp.osd_message("Screenshot not tweeted, check the console for errors")
-		print("Something went wrong. Error code: " .. err["status"])
+		send("Something went wrong. Error code: " .. err["status"])
 		for k, v in pairs(err) do print(k .. ": " .. v) end
 	end
-	os.remove(img_name)
+
+	for i = 1, queue do os.remove(file .. i .. ".jpg") end
 	old_filename = mp.get_property("filename")
+	queue = 0
 end
 
-old_filename = ""
-hashtag = ""
+old_filename, hashtag, queue = "", "", 0
 
+mp.add_key_binding("Alt+a", "add_scrot", function() add_screenshot() end)
 mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
-mp.add_key_binding("Shift+Alt+W", "tweet_text", function() tweet(true) end)
+mp.add_key_binding("Shift+Alt+w", "tweet_with_text", function() tweet(true) end)
+mp.add_key_binding("Shift+Alt+c", "cancel_tweet", function() cancel_tweet() end)

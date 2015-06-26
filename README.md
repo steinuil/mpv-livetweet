@@ -6,13 +6,23 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 > *"lol straight to twitter, your followers probably hate you"* - **[ChrisK2](https://github.com/ChrisK2)**
 
+> *"you're creating a monster"* - **Cidoku**
+
+### Features
+  * Text adding
+  * Multi-screenshot drifting
+  * Annie-May hashtag retrieving
+  * Best app name ever
+
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
 ### Requirements
-  * [luatwit](https://github.com/darkstalker/LuaTwit)
+  * lua 5.1/5.2
+  * [luatwit](https://github.com/darkstalker/LuaTwit) (`luarocks install luatwit`)
   * [luasocket](http://w3.impa.br/~diego/software/luasocket/) (`luarocks install luasocket`)
   * [OAuth](https://github.com/ignacio/LuaOAuth) (`luarocks install oauth`)
   * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
+  * A decent OS (see below)
 
 Currently only tested on Lua 5.1, should work on 5.2 too. 5.3 is no good since mpv doesn't support it yet.
 
@@ -35,10 +45,18 @@ Installation
 	```
   * Open `mpv-livetweet.lua` with a text editor and paste the `oauth_token` and `oauth_token_secret` *enclosed in double quotes* where it tells you to.
   * Uncomment the line matching your OS, save and close the script.
-  * Set the value of `hashtag` to `false` if you don't want it to retrieve a hashtag for the series.
+  * Set the value of `search_hashtag` to `false` if you don't want it to retrieve a hashtag for the series.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
-    * If you're on Windows, move `get-body.vbs` to the scripts directory too.
-  * Press `alt+w` to tweet a screenshot and `shift+alt+w` to tweet a screenshot with text.
+
+### Commands
+| Shortcut        | When queue is empty                 | With screenshots in queue                |
+| --------------- | ----------------------------------- | ---------------------------------------- |
+| **Alt+a**       | Add a screenshot to the queue       | Add a screenshot to queue                |
+| **Alt+w**       | Tweet a single screenshot           | Tweet all screenshots in queue           |
+| **Shift+Alt+w** | Tweet a single screenshot with text | Tweet all screenshots in queue with text |
+| **Shift+Alt+c** | -                                   | Deletes all screenshots in queue         |
+
+You can tweet up to 4 screenshots at once.
 
 Troubleshooting
 ---------------
@@ -62,7 +80,8 @@ TODO
   - [X] Display a window for the tweet body on Linux.
     - [X] Come up with something similar for Windows.
 	  - [X] Integrate the hashtag in the Windows script. Fuck you, CScript.exe.
-  - [ ] Add support for multiple screenshots.
+  - [X] Add support for multiple screenshots.
+  - [ ] Evaluate user's taste
 
 ----
 ![image](http://blog.codinghorror.com/content/images/uploads/2007/03/6a0120a85dcdae970b0128776ff992970c-pi.png)
