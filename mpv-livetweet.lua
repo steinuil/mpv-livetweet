@@ -70,7 +70,7 @@ function get_hashtag()
 	elseif results["status"] == 401 then
 		print("AniList token expired.")
 		get_anilist_token()
-		get_hashtag()
+		hashtag = get_hashtag()
 	else
 		local anime_r = http.request(prefix ..  results[1]["id"] .. '?' .. token)
 		local anime = json.decode(anime_r)
