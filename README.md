@@ -34,12 +34,12 @@ Installation
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
 
 ### Commands
-| Shortcut        | When queue is empty                | With screenshots in queue           |
-| --------------- | ---------------------------------- | ----------------------------------- |
-| **Alt+a**       | Queue a screenshot                 | Queue a screenshot                  |
-| **Alt+w**       | Tweet single screenshot            | Tweet queued screenshots            |
-| **Shift+Alt+w** | Tweet single screenshot w/ comment | Tweet queued screenshots w/ comment |
-| **Shift+Alt+c** | -                                  | Delete queued screenshots           |
+| Shortcut        | When queue is empty                  | With screenshots in queue             |
+| --------------- | ------------------------------------ | ------------------------------------- |
+| **Alt+a**       | Queue a screenshot                   | Queue a screenshot                    |
+| **Alt+w**       | Tweet single screenshot              | Tweet queued screenshots              |
+| **Shift+Alt+w** | Tweet single screenshot with comment | Tweet queued screenshots with comment |
+| **Shift+Alt+c** | -                                    | Delete queued screenshots             |
 
 You can tweet up to 4 screenshots at once.
 

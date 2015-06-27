@@ -86,9 +86,9 @@ function get_text(hashtag)
 		command = 'zenity --title mpv-livetweet --entry --text "Tweet body" ' ..
 		'--entry-text " ' .. hashtag .. '"'
 	elseif os_name == "osx" then
-		command = 'osascript -e \'tell application "mpv" to set tweet to text returned of (disp' ..
-			'lay dialog "" with title "Tweet body" default answer " ' .. hashtag .. '" buttons ' ..
-			'"Tweet" default button 1)\' -e \' do shell script "echo " & quoted form of tweet'
+		command = 'osascript -e \'set tweet to text returned of (display dialog "" with title "' ..
+		'Tweet body" default answer " ' .. hashtag .. '" buttons "Tweet" default button 1)\' -e' ..
+		' \'do shell script "echo " & quoted form of tweet\''
 	elseif os_name == "windows" then
 		tmp_file = os.tmpname() .. ".vbs"
 		local open_file = io.open(tmp_file, "w")
@@ -180,5 +180,5 @@ old_filename, hashtag, queue = "", "", 0
 
 mp.add_key_binding("Alt+a", "queue_screenshot", function() queue_screenshot() end)
 mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
-mp.add_key_binding("Shift+Alt+w", "tweet_with_comment", function() tweet(true) end)
-mp.add_key_binding("Shift+Alt+c", "cancel_tweet", function() cancel_tweet() end)
+mp.add_key_binding("Alt+W", "tweet_with_comment", function() tweet(true) end)
+mp.add_key_binding("Alt+C", "cancel_tweet", function() cancel_tweet() end)
