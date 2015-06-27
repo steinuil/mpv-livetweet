@@ -22,8 +22,8 @@ local twitter_keys = {
 	consumer_key = "7svu0BZBvEqCuA3XbCUbXoHPA",
 	consumer_secret = base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
 		'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
-	oauth_token = token,
-	oauth_token_secret = token_secret
+	oauth_token = oauth_token,
+	oauth_token_secret = oauth_token_secret
 }
 
 local anilist_keys = {
@@ -155,7 +155,7 @@ function tweet(comment)
 	media = {}
 	for i = 1, queue do
 		send("Uploading screenshot " .. i .. " of " .. queue .. "...")
-		local headers = client:upload_media{
+		local headers, err = client:upload_media{
 			media = utils.attach_file(file .. i .. ".jpg")
 		}
 		table.insert(media, headers["media_id_string"])
