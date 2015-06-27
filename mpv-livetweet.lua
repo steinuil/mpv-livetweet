@@ -167,7 +167,7 @@ function tweet(comment)
 	if err["status"] == "200 OK" then
 		send("Screenshots tweeted!")
 	else
-		send("Something went wrong. Error code: " .. err["status"])
+		send("Something went wrong.")
 		for k, v in pairs(err) do print(k .. ": " .. v) end
 	end
 
