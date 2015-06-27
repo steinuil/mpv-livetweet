@@ -152,7 +152,7 @@ function tweet(comment)
 	mp.resume()
 
 	local client = twitter.api.new(twitter_keys)
-	media = {}
+	local media = {}
 	for i = 1, queue do
 		send("Uploading screenshot " .. i .. " of " .. queue .. "...")
 		local headers, err = client:upload_media{
@@ -160,6 +160,8 @@ function tweet(comment)
 		}
 		table.insert(media, headers["media_id_string"])
 	end
+	if queue == 1 then media = media[1] end
+
 	local tw, err = client:tweet{ media_ids = media, status = body }
 
 	if err["status"] == "200 OK" then
