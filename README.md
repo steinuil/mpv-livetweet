@@ -17,15 +17,19 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
 
 ### Requirements
-  * [lua](https://lua.org/) 5.1.x/5.2.x
-  * [luarocks](https://luarocks.org/) >= 2.2.0
-  * [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) (`luarocks install luatwit luasocket`)
-  * [Zenity](https://wiki.gnome.org/Projects/Zenity) (only for Linux/BSD/etc)
-  * [A half-decent OS](https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation) (not Windows)
+  * [lua](https://lua.org/) 5.1 or 5.2
+  * [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) - `luarocks install luatwit luasocket`
 
-Currently only tested on Lua 5.1, should work on 5.2 too. 5.3 is no good since mpv doesn't support it yet.
+#### Linux/BSD/etc.
+  * [Zenity](https://wiki.gnome.org/Projects/Zenity)
 
-One of the libraries required by LuaTwit doesn't support Windows, so you won't be able to install the dependencies. If that somehow changes, the script will run without problems.
+#### OS X
+If you're using OS X >= 10.11, you'll have to install [homebrew](http://brew.sh)'s version of openssl and brew link it, and send curl's headers position to luarocks:
+* `brew install curl openssl && brew link --force openssl`
+* `luarocks install luatwit luasocket 'CURL_INCDIR=/usr/local/opt/curl/include'`
+
+#### Windows
+Last time I tried to install luaossl on windows it wasn't supported. The script has been designed to work on Windows too, so if you manage to install luaossl, the script will run without changes.
 
 Installation
 ------------
