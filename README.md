@@ -75,7 +75,7 @@ TODO
     - [X] Come up with something similar for Windows.
 	  - [X] Integrate the hashtag in the Windows script. Fuck you, CScript.exe.
   - [X] Add support for multiple screenshots.
-  - [ ] Evaluate user's taste
+  - [ ] ~~Evaluate user's taste~~ (no need to, it's always shit)
 
 ----
 ![image](http://blog.codinghorror.com/content/images/uploads/2007/03/6a0120a85dcdae970b0128776ff992970c-pi.png)
