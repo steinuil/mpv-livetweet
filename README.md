@@ -14,7 +14,7 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
   * Annie-May hashtag retrieving
   * Best app name ever
 
-Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/text.zip).
+Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/master.zip).
 
 ### Requirements
   * [lua](https://lua.org/) 5.1 or 5.2
