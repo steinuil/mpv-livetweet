@@ -16,8 +16,9 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 
 Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/master.zip).
 
-### Requirements
-  * [lua](https://lua.org/) 5.1 or 5.2
+Requirements
+------------
+  * [lua](https://lua.org/) 5.2 (other versions **will not** work)
   * [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) - `luarocks install luatwit luasocket`
 
 #### Linux/BSD/etc.
@@ -35,9 +36,14 @@ Installation
 ------------
   * Run `lua get-keys.lua` and follow the instructions to get your OAuth keys. Save the keys somewhere safe.
   * Open `mpv-livetweet.lua` in your favourite text editor to configure it.
+    * Paste the OAuth keys inside double quotes.
+    * Uncomment the corresponding `os_name` line.
+    * If you have a slow connection you might want to disable querying for the hashtag, as it will pause your player until the request is over.
   * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
+    * Do not move `get_keys.lua` in the scripts directory.
 
-### Commands
+Commands
+--------
 | Shortcut        | When queue is empty                  | With screenshots in queue             |
 | --------------- | ------------------------------------ | ------------------------------------- |
 | **Alt+a**       | Queue a screenshot                   | Queue a screenshot                    |
@@ -57,10 +63,12 @@ Replace `queue_screenshot` with the name of the function you want to remap. The 
 
 Troubleshooting
 ---------------
+Read the requirements and installation instructions **very carefully**. Make sure you have everything installed.
+
 If you did everything right, the script should work. If you still have problems, add an issue on here or fire me a question on [twitter](https://twitter.com/steinuil).
 
 ### Lua can't find some of the files in the required libraries!
-Good luck with that. It's a luarocks problem, you should try finding out your package path with `lua -e 'print(package.path)'` and change your `/etc/luarocks/config-5.x.lua` file to match that. Setting the path to `/usr` did it for me, but it may depend on your OS/distro.
+Good luck with that. It's a luarocks problem, you should try finding out your package path with `lua -e 'print(package.path)'` and change your `/etc/luarocks/config-5.2.lua` file to match that. Setting the path to `/usr` did it for me, but it may depend on your OS/distro.
 
 ### I just tweeted a hundred thousand Onodera screenshots while watching Nisekoi and now my followers are halved!
 Stop being [@nyarth](http://twitter.com/nyarth).
