@@ -3,8 +3,8 @@ base64 = require 'base64'
 
 client = twitter.api.new {
   consumer_key: "7svu0BZBvEqCuA3XbCUbXoHPA",
-	consumer_secret: base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
-		'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
+  consumer_secret: base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
+    'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
 }
 
 assert client\oauth_request_token!

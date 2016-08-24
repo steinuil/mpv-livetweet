@@ -8,15 +8,15 @@ base64  = require 'base64'
 
 twitter_keys = {
   consumer_key: '7svu0BZBvEqCuA3XbCUbXoHPA',
-	consumer_secret: base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
-		'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
-	oauth_token: oauth_token,
-	oauth_token_secret: oauth_token_secret
+  consumer_secret: base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
+    'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
+  oauth_token: oauth_token,
+  oauth_token_secret: oauth_token_secret
 }
 
 anilist_keys = {
   client_id: 'steenuil-elxbm',
-	client_secret: base64.decode('REI2UU42UTF2bGYyenJEN05PRERCVXRNMg==')
+  client_secret: base64.decode('REI2UU42UTF2bGYyenJEN05PRERCVXRNMg==')
 }
 
 assert os_name, 'No OS set!'
