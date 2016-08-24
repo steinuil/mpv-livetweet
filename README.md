@@ -22,7 +22,7 @@ Get these:
 - [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) - `luarocks install luatwit luasocket`
 - [Zenity](https://wiki.gnome.org/Projects/Zenity) if you're not on MacOS or Windows
 
-Good luck getting luaossl working on OS X.
+Good luck getting luaossl working on OS X or Windows.
 
 Then:
 - Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/master.zip).
