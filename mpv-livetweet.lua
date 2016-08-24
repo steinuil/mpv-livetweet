@@ -1,184 +1,262 @@
--- Credentials
-oauth_token = "Paste your oauth_token here"
-oauth_token_secret = "Paste your oauth_token_secret here"
-
--- OS (remove the "--" in front of the line that matches your OS)
---os_name = "osx"
---os_name = "windows"
---os_name = "nix"
-
--- Set to false if you don't want the script to retrieve the hashtag
-search_hashtag = true
-
--- Script - don't change anything below this point
-local twitter = require 'luatwit'
-local base64 = require 'base64'
-local utils = require 'luatwit.util'
-local http = require 'socket.http'
-local json = require 'dkjson'
-local ltn12 = require 'ltn12'
-
+local twitter = require('luatwit')
+local utils = require('luatwit.util')
+local json = require('dkjson')
+local http = require('socket.http')
+local ltn12 = require('ltn12')
+local base64 = require('base64')
 local twitter_keys = {
-	consumer_key = "7svu0BZBvEqCuA3XbCUbXoHPA",
-	consumer_secret = base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' ..
-		'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
-	oauth_token = oauth_token,
-	oauth_token_secret = oauth_token_secret
+  consumer_key = '7svu0BZBvEqCuA3XbCUbXoHPA',
+  consumer_secret = base64.decode('NlU4UnlONTVWY3R2WXRvaDBtZ0JxVU84cDJnTH' .. 'FRRnZGUDBNUkRMaFVoT0VPTXJaVGk='),
+  oauth_token = oauth_token,
+  oauth_token_secret = oauth_token_secret
 }
-
 local anilist_keys = {
-	client_id = "steenuil-elxbm",
-	client_secret = base64.decode('REI2UU42UTF2bGYyenJEN05PRERCVXRNMg==')
+  client_id = 'steenuil-elxbm',
+  client_secret = base64.decode('REI2UU42UTF2bGYyenJEN05PRERCVXRNMg==')
 }
-
-function get_anilist_token()
-	print("Getting AniList token...")
-	local args = 'grant_type=client_credentials&client_id=' ..
-	             anilist_keys["client_id"] .. '&client_secret=' ..
-				 anilist_keys["client_secret"]
-	local response = {}
-
-	local res, code, head = http.request{
-		url = 'http://anilist.co/api/auth/access_token?' .. args,
-		method = "POST",
-		sink = ltn12.sink.table(response)
-	}
-
-	local table = json.decode(response[1])
-	anilist_keys["access_token"] = table["access_token"]
-	print("AniList token obtained.")
+assert(os_name, 'No OS set!')
+local old_filename, hashtag, queue = '', '', { }
+local send
+send = function(msg)
+  print(msg)
+  return mp.osd_message(msg)
 end
-
-function get_hashtag()
-	if anilist_keys["access_token"] == nil then get_anilist_token() end
-
-	local prefix = "http://anilist.co/api/anime/"
-	local token = '&access_token=' .. anilist_keys["access_token"]
-	local hashtag = ""
-	local query = mp.get_property("filename")
-	local ext = "%." .. mp.get_property("file-format")
-
-	local subst = { ext, '%b[]', '%b()', '%d%d%a?%d?', '[sS]pecial[a-zA-Z]?' }
-	for i, v in ipairs(subst) do query = query:gsub(v, "") end
-	for i, v in ipairs({'_','[^a-zA-Z0-9]','%s+'}) do query = query:gsub(v, " ") end
-	--print('Searching for "' .. query .. '"...')
-
-	local request = http.request(prefix .. 'search/' ..  query .. '?' .. token)
-	local results = json.decode(request)
-	if results == nil then
-		hashtag = ""
-	elseif results["status"] == 401 then
-		print("AniList token expired.")
-		get_anilist_token()
-		hashtag = get_hashtag()
-	else
-		local anime_r = http.request(prefix ..  results[1]["id"] .. '?' .. token)
-		local anime = json.decode(anime_r)
-		hashtag = anime["hashtag"]
-		if hashtag == nil then hashtag = "" end
-	end
-	return hashtag
+local delete_files
+delete_files = function()
+  for _index_0 = 1, #queue do
+    local file = queue[_index_0]
+    os.remove(file)
+  end
+  queue = { }
 end
-
-function get_text(hashtag)
-	print("Getting text input...")
-	if os_name == "nix" then
-		command = 'zenity --title mpv-livetweet --entry --text "Tweet body" ' ..
-		'--entry-text " ' .. hashtag .. '"'
-	elseif os_name == "osx" then
-		command = 'osascript -e \'set tweet to text returned of (display dialog "" with title "' ..
-		'Tweet body" default answer " ' .. hashtag .. '" buttons "Tweet" default button 1)\' -e' ..
-		' \'do shell script "echo " & quoted form of tweet\''
-	elseif os_name == "windows" then
-		tmp_file = os.tmpname() .. ".vbs"
-		local open_file = io.open(tmp_file, "w")
-		open_file:write('WScript.StdOut.Write(InputBox(" ' .. hashtag .. '", "Tweet body"))')
-		open_file:close()
-		command = 'cscript //B //Nologo ' .. tmp_file
-	end
-	local text_in = io.popen(command)
-	if os_name == "windows" then os.remove(tmp_file) end
-	local body = text_in:read("*a")
-	text_in:close()
-	return body
+local filename
+filename = function()
+  return mp.get_property('filename')
 end
-
-function send(msg)
-	print(msg)
-	mp.osd_message(msg)
+local send_tweet
+send_tweet = function(body)
+  do
+    local _with_0 = twitter.api.new(twitter_keys)
+    local media = { }
+    for _index_0 = 1, #queue do
+      local file = queue[_index_0]
+      local headers, err = _with_0:upload_media({
+        media = utils.attach_file(file)
+      })
+    end
+    if #queue < 2 then
+      media = media[1]
+    end
+    local _, err = _with_0:tweet({
+      media_ids = media,
+      status = body
+    })
+    if err['status'] == '200 OK' then
+      _ = true, nil
+    else
+      _ = false, err
+    end
+    return _with_0
+  end
 end
-
-function cancel_tweet()
-	if queue > 0 then
-		send("Deleting screenshots in queue...")
-		for i = 1, queue do os.remove(file .. i .. ".jpg") end
-		queue = 0
-	end
+local anilist_token
+anilist_token = function()
+  print('Retrieving AniList token')
+  local args = 'grant_type=client_credentials&client_id=' .. anilist_keys['client_id'] .. '&client_secret=' .. anilist_keys['client_secret']
+  local response = { }
+  http.request({
+    url = "http://anilist.co/api/auth/access_token?" .. tostring(args),
+    method = 'POST',
+    sink = ltn12.sink.table(response)
+  })
+  anilist_keys['token'] = json.decode(response[1])['access_token']
+  return print('AniList token obtained')
 end
-
-function queue_screenshot()
-	if queue == 4 then
-		send("Queue full, screenshot not taken.")
-	else
-		if queue == 0 then
-			file = os.tmpname(); os.remove(file)
-		end
-
-		queue = queue + 1
-		mp.commandv("screenshot_to_file", file .. queue .. ".jpg", "subtitles")
-
-		if queue < 4 then
-			send("Added screenshot " .. queue .. " to the queue.")
-		else
-			send("Queue full.")
-		end
-	end
+local get_hashtag
+get_hashtag = function()
+  if anilist_keys['token'] == nil then
+    anilist_token()
+  end
+  local query = filename()
+  do
+    local ext = '%.' .. mp.get_property('file-format')
+    local s1 = {
+      ext,
+      '%b[]',
+      '%b()',
+      '%d%d%a?%d?',
+      '[sS]pecial[a-zA-Z]?'
+    }
+    local s2 = {
+      '_',
+      '[^a-zA-Z0-9]',
+      '%s+'
+    }
+    for _index_0 = 1, #s1 do
+      local i, v = s1[_index_0]
+      query = query:gsub(v, '')
+    end
+    for _index_0 = 1, #s2 do
+      local i, v = s2[_index_0]
+      query = query:gsub(v, ' ')
+    end
+  end
+  local request
+  request = function(action)
+    return json.decode(http.request("http://anilist.co/api/anime/" .. tostring(action) .. "?access_token=" .. tostring(anilist_keys['token'])))
+  end
+  local results = request('search/')
+  if results == nil then
+    return ''
+  elseif results['status'] == 401 then
+    print('AniList token expired')
+    anilist_token()
+    return get_hashtag()
+  else
+    local h = request(results[1]['id']['hashtag'] or '')
+  end
 end
-
-function tweet(comment)
-	if queue == 0 then queue_screenshot() end
-
-	if search_hashtag and old_filename ~= mp.get_property("filename") then
-		hashtag = get_hashtag()
-	end
-
-	if comment then
-		body = get_text(hashtag)
-	else
-		if search_hashtag and hashtag ~= "" then print("Tweeting with hashtag " .. hashtag) end
-		body = hashtag
-	end
-
-	mp.resume()
-
-	local client = twitter.api.new(twitter_keys)
-	local media = {}
-	for i = 1, queue do
-		send("Uploading screenshot " .. i .. " of " .. queue .. "...")
-		local headers, err = client:upload_media{
-			media = utils.attach_file(file .. i .. ".jpg")
-		}
-		table.insert(media, headers["media_id_string"])
-	end
-	if queue == 1 then media = media[1] end
-
-	local tw, err = client:tweet{ media_ids = media, status = body }
-
-	if err["status"] == "200 OK" then
-		send("Screenshots tweeted!")
-	else
-		send("Something went wrong.")
-		for k, v in pairs(err) do print(k .. ": " .. v) end
-	end
-
-	for i = 1, queue do os.remove(file .. i .. ".jpg") end
-	old_filename = mp.get_property("filename")
-	queue = 0
+local queue_screenshot
+queue_screenshot = function(msg)
+  if msg == nil then
+    msg = true
+  end
+  if #queue > 3 then
+    return send('Queue full, screenshot not taken')
+  else
+    local shot
+    do
+      local f = os.tmpname()
+      os.remove(f)
+      local _ = f .. #queue + 1 .. '.jpg'
+      shot = f
+    end
+    queue[#queue + 1] = shot
+    mp.commandv('screenshot_to_file', shot, 'subtitles')
+    if msg then
+      return send("Queued screenshot " .. tostring(#queue) .. " of 4")
+    end
+  end
 end
-
-old_filename, hashtag, queue = "", "", 0
-
-mp.add_key_binding("Alt+a", "queue_screenshot", function() queue_screenshot() end)
-mp.add_key_binding("Alt+w", "tweet", function() tweet(false) end)
-mp.add_key_binding("Alt+W", "tweet_with_comment", function() tweet(true) end)
-mp.add_key_binding("Alt+C", "cancel_tweet", function() cancel_tweet() end)
+local cancel_tweet
+cancel_tweet = function()
+  if #queue > 0 then
+    send('Deleting queued screenshots')
+    return delete_files()
+  end
+end
+local prompt_text
+prompt_text = function(hashtag)
+  local script
+  if #hashtag == 0 then
+    hashtag = " " .. tostring(hashtag)
+  end
+  print('Getting text input')
+  local command
+  local _exp_0 = os_name
+  if 'linux' == _exp_0 then
+    command = 'zenity --title mpv-livetweet --entry --text "Tweet body ' .. "--entry-text \"" .. tostring(hashtag) .. "\""
+  elseif 'macos' == _exp_0 then
+    command = "osascript -e 'set tweet to text returned of " .. '(display dialog "" with title "Tweet body" default answer "' .. hashtag .. '" buttons "Tweet" default button 1)\'' .. '-e \' do shell script "echo " & quoted form of tweet\''
+  elseif 'windows' == _exp_0 then
+    script = os.tmpname() .. '.vbs'
+    do
+      local _with_0 = io.open(script, 'w')
+      _with_0:write("WScript.Stdout.Write(InputBox(\"" .. tostring(hashtag) .. "\", \"Tweet body\"))")
+      _with_0:close()
+    end
+    command = "cscript //B //Nologo " .. tostring(script)
+  end
+  do
+    local _with_0 = io.popen(command)
+    local body = _with_0:read('*a')
+    _with_0:close()
+  end
+  if os_name == 'windows' then
+    os.remove(script)
+  end
+  return body
+end
+local tweet
+tweet = function(comment)
+  if comment == nil then
+    comment = false
+  end
+  if #queue < 1 then
+    queue_screenshot(false)
+  end
+  if old_filename ~= filename() then
+    local ok, err = pcall(get_hashtag)
+    if ok then
+      hashtag = err
+    else
+      send('Unable to retrieve hashtag')
+      for _index_0 = 1, #err do
+        local k, v = err[_index_0]
+        print(tostring(k) .. ": " .. tostring(v))
+      end
+      hashtag = ''
+    end
+  end
+  local body
+  if comment then
+    while true do
+      body = prompt_text(hashtag)
+      if not (#body < 116) then
+        break
+      end
+      send('Comment too long! Try again')
+    end
+  else
+    body = hashtag
+  end
+  send("Tweeting " .. tostring(#queue) .. " screenshots with comment \"" .. tostring(body) .. "\"")
+  do
+    local ok, err = send_tweet(body)
+    if ok then
+      send('Screenshots tweeted!')
+    else
+      send('Something went wrong')
+      for _index_0 = 1, #err do
+        local k, v = err[_index_0]
+        print(tostring(k) .. ": " .. tostring(v))
+      end
+    end
+  end
+  delete_files()
+  old_filename = filename()
+end
+local commands = {
+  {
+    'Alt+a',
+    'queue_screenshot',
+    function()
+      return queue_screenshot()
+    end
+  },
+  {
+    'Alt+w',
+    'tweet',
+    function()
+      return tweet()
+    end
+  },
+  {
+    'Alt+W',
+    'tweet_with_comment',
+    function()
+      return tweet(true)
+    end
+  },
+  {
+    'Alt+C',
+    'cancel_tweet',
+    function()
+      return cancel_tweet()
+    end
+  }
+}
+for _index_0 = 1, #commands do
+  local c = commands[_index_0]
+  mp.add_key_binding(c[1], c[2], c[3])
+end

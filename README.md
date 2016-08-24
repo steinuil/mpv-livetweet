@@ -14,33 +14,22 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
   * Annie-May hashtag retrieving
   * Best app name ever
 
-Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/master.zip).
-
-Requirements
-------------
-  * [lua](https://lua.org/) 5.2 (other versions **will not** work)
-  * [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) - `luarocks install luatwit luasocket`
-
-#### Linux/BSD/etc.
-  * [Zenity](https://wiki.gnome.org/Projects/Zenity)
-
-#### OS X
-If you're using OS X >= 10.11, you'll have to install [homebrew](http://brew.sh)'s version of openssl and brew link it, and send curl's headers position to luarocks:
-* `brew install curl openssl && brew link --force openssl`
-* `luarocks install luatwit luasocket 'CURL_INCDIR=/usr/local/opt/curl/include'`
-
-#### Windows
-Last time I tried to install luaossl on windows it wasn't supported. The script has been designed to work on Windows too, so if you manage to install luaossl, the script will run without changes.
 
 Installation
 ------------
-  * Run `lua get-keys.lua` and follow the instructions to get your OAuth keys. Save the keys somewhere safe.
-  * Open `mpv-livetweet.lua` in your favourite text editor to configure it.
-    * Paste the OAuth keys inside double quotes.
-    * Uncomment the corresponding `os_name` line.
-    * If you have a slow connection you might want to disable querying for the hashtag, as it will pause your player until the request is over.
-  * Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
-    * Do not move `get_keys.lua` in the scripts directory.
+Get these:
+- [lua](https://lua.org/) 5.2
+- [luatwit](https://github.com/darkstalker/LuaTwit) and [luasocket](http://w3.impa.br/~diego/software/luasocket/) - `luarocks install luatwit luasocket`
+- [Zenity](https://wiki.gnome.org/Projects/Zenity) if you're not on MacOS or Windows
+
+Good luck getting luaossl working on OS X.
+
+Then:
+- Download the script [here](https://github.com/steinuil/mpv-livetweet/archive/master.zip).
+- Run `lua get-keys.lua` and follow the instructions.
+- Move `mpv-livetweet.lua` to `~/.config/mpv/scripts` or `%APPDATA%/mpv/scripts` depending on your OS.
+- **Do not** move `get-keys.lua` into the scripts directory.
+
 
 Commands
 --------
@@ -61,11 +50,15 @@ alt+d script_binding mpv-livetweet.queue_screenshot
 
 Replace `queue_screenshot` with the name of the function you want to remap. The functions are `queue_screenshot`, `tweet`, `tweet_with_comment` and `cancel_tweet`.
 
+
+Development
+-----------
+If you don't like how mpv-livetweet works, just [install moonscript](http://moonscript.org) and start hacking the files in the `src/` directory. Use `make` to compile.
+
+
 Troubleshooting
 ---------------
-Read the requirements and installation instructions **very carefully**. Make sure you have everything installed.
-
-If you did everything right, the script should work. If you still have problems, add an issue on here or fire me a question on [twitter](https://twitter.com/steinuil).
+Make sure to have everything installed. Luarocks isn't exactly the best package manager, so you might want to check.
 
 ### Lua can't find some of the files in the required libraries!
 Good luck with that. It's a luarocks problem, you should try finding out your package path with `lua -e 'print(package.path)'` and change your `/etc/luarocks/config-5.2.lua` file to match that. Setting the path to `/usr` did it for me, but it may depend on your OS/distro.
@@ -73,19 +66,8 @@ Good luck with that. It's a luarocks problem, you should try finding out your pa
 ### I just tweeted a hundred thousand Onodera screenshots while watching Nisekoi and now my followers are halved!
 Stop being [@nyarth](http://twitter.com/nyarth).
 
-TODO
-----
-  - [X] Make the script more verbose.
-    - [X] Actually check the answer of the server to determine if the screenshot was actually tweeted.
-  - [X] Auto-detect the name of the anime you're watching and tweet with the respective hashtag.
-    - [X] Integrate the AniList DB to retrieve said hashtag.
-  - [X] Display a window for the tweet body on Linux.
-    - [X] Come up with something similar for Windows.
-	  - [X] Integrate the hashtag in the Windows script. Fuck you, CScript.exe.
-  - [X] Add support for multiple screenshots.
-  - [ ] ~~Evaluate user's taste~~ (no need to, it's always shit)
+---
 
-----
 ![image](http://blog.codinghorror.com/content/images/uploads/2007/03/6a0120a85dcdae970b0128776ff992970c-pi.png)
 
 If it doesn't work on yours, file an issue or bug me on twitter [@steinuil](https://twitter.com/steinuil)
