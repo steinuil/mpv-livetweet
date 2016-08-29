@@ -132,7 +132,7 @@ prompt_text = (hashtag using nil) ->
 
   command = switch os_name
     when 'linux'
-      'zenity --title mpv-livetweet --entry --text "Tweet body ' ..
+      'zenity --title mpv-livetweet --entry --text "Tweet body" ' ..
       "--entry-text \"#{hashtag}\""
 
     when 'macos'

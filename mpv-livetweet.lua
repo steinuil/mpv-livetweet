@@ -155,7 +155,7 @@ prompt_text = function(hashtag)
   local command
   local _exp_0 = os_name
   if 'linux' == _exp_0 then
-    command = 'zenity --title mpv-livetweet --entry --text "Tweet body ' .. "--entry-text \"" .. tostring(hashtag) .. "\""
+    command = 'zenity --title mpv-livetweet --entry --text "Tweet body" ' .. "--entry-text \"" .. tostring(hashtag) .. "\""
   elseif 'macos' == _exp_0 then
     command = "osascript -e 'set tweet to text returned of " .. '(display dialog "" with title "Tweet body" default answer "' .. hashtag .. '" buttons "Tweet" default button 1)\'' .. '-e \' do shell script "echo " & quoted form of tweet\''
   elseif 'windows' == _exp_0 then
