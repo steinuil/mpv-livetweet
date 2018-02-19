@@ -126,6 +126,7 @@ cancel_tweet = ->
 --- Ugly shit
 prompt_text = (hashtag using nil) ->
   local script
+  local body
 
   hashtag = " #{hashtag}" if #hashtag == 0
   print 'Getting text input'

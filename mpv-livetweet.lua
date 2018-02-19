@@ -148,6 +148,7 @@ end
 local prompt_text
 prompt_text = function(hashtag)
   local script
+  local body
   if #hashtag == 0 then
     hashtag = " " .. tostring(hashtag)
   end
@@ -169,7 +170,7 @@ prompt_text = function(hashtag)
   end
   do
     local _with_0 = io.popen(command)
-    local body = _with_0:read('*a')
+    body = _with_0:read('*a')
     _with_0:close()
   end
   if os_name == 'windows' then
