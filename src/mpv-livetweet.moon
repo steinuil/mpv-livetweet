@@ -175,7 +175,7 @@ tweet = (comment=false) ->
   if comment
     while true
       body = prompt_text hashtag
-      break unless #body < 116
+      break if #body < 116
       send 'Comment too long! Try again'
   else
     body = hashtag

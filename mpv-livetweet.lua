@@ -203,7 +203,7 @@ tweet = function(comment)
   if comment then
     while true do
       body = prompt_text(hashtag)
-      if not (#body < 116) then
+      if #body < 116 then
         break
       end
       send('Comment too long! Try again')
