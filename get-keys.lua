@@ -22,9 +22,14 @@ while true do
 end
 print('Writing options to file')
 local options = "oauth_token = '" .. tostring(token['oauth_token']) .. "'\n  oauth_token_secret = '" .. tostring(token['oauth_token_secret']) .. "'\n\n  os_name = '" .. tostring(os_name) .. "'\n  "
+local file = ''
 do
-  local _with_0 = io.open('mpv-livetweet.lua', '*r')
-  local file = _with_0:read('*all')
+  local _with_0 = io.open('mpv-livetweet.lua', 'r')
+  file = _with_0:read('*all')
+  _with_0:close()
+end
+do
+  local _with_0 = io.open('mpv-livetweet.lua', 'w')
   _with_0:write(options .. file)
   _with_0:close()
   return _with_0

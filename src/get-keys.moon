@@ -33,7 +33,11 @@ options = "oauth_token = '#{token['oauth_token']}'
   os_name = '#{os_name}'
   "
 
-with io.open 'mpv-livetweet.lua', '*r'
+file = ''
+with io.open 'mpv-livetweet.lua', 'r'
   file = \read '*all'
+  \close!
+with io.open 'mpv-livetweet.lua', 'w'
   \write options .. file
   \close!
+
