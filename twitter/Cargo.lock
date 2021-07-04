@@ -1180,6 +1180,8 @@ dependencies = [
  "clap",
  "egg-mode",
  "futures",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 

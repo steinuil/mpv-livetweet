@@ -1,4 +1,5 @@
 use clap::Clap;
+use serde::Serialize;
 
 #[derive(Clap)]
 struct Config {
@@ -19,12 +20,19 @@ struct Config {
 
     #[clap(long, multiple = true)]
     file: Vec<String>,
+
+    #[clap(long)]
+    reply_to: Option<u64>,
 }
 
-#[tokio::main]
-async fn main() {
-    let config = Config::parse();
+#[derive(Serialize)]
+#[serde(tag = "type")]
+enum TweetResult {
+    Success { id: String, url: String },
+    Failure { error: String },
+}
 
+async fn send_tweet(config: Config) -> Result<egg_mode::tweet::Tweet, egg_mode::error::Error> {
     let token = egg_mode::Token::Access {
         consumer: egg_mode::KeyPair::new(config.consumer_key, config.consumer_secret),
         access: egg_mode::KeyPair::new(config.access_token_key, config.access_token_secret),
@@ -43,15 +51,34 @@ async fn main() {
 
     let mut draft = egg_mode::tweet::DraftTweet::new(config.status);
 
+    draft.in_reply_to = config.reply_to;
+
     for handle in media_handles {
         draft.add_media(handle.id);
     }
 
-    let resp = draft.send(&token).await.unwrap();
+    let tweet = draft.send(&token).await.unwrap().response;
 
-    print!(
-        "https://twitter.com/{}/status/{}",
-        resp.response.user.unwrap().screen_name,
-        resp.response.id
-    );
+    Ok(tweet)
+}
+
+#[tokio::main]
+async fn main() {
+    let config = Config::parse();
+
+    let result = match send_tweet(config).await {
+        Ok(tweet) => TweetResult::Success {
+            id: tweet.id.to_string(),
+            url: format!(
+                "https://twitter.com/{}/status/{}",
+                tweet.user.unwrap().screen_name,
+                tweet.id
+            ),
+        },
+        Err(error) => TweetResult::Failure {
+            error: error.to_string(),
+        },
+    };
+
+    print!("{}", serde_json::to_string(&result).unwrap())
 }

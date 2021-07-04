@@ -8,4 +8,6 @@ version = "0.1.0"
 clap = "3.0.0-beta.2"
 egg-mode = {git = "https://github.com/egg-mode-rs/egg-mode", rev = "6b81073eba9"}
 futures = "0.3"
+serde = "1.0"
+serde_json = "1.0"
 tokio = {version = "1.8", features = ["full"]}

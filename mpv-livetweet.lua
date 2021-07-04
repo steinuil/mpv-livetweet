@@ -6,7 +6,9 @@ local options = {
   keybind_queue_screenshot = "Alt+s",
   keybind_tweet = "Alt+t",
   keybind_cancel = "Alt+c",
+  keybind_clear_reply = "Alt+x",
   fetch_hashtag = true,
+  as_reply = true,
   curl_path = "",
   twitter_path = "",
   consumer_key = "",
@@ -170,6 +172,15 @@ mp.register_event('shutdown', delete_queued_screenshots)
 
 -- Tweet
 
+local LAST_TWEET_ID = nil
+
+local function clear_reply()
+  if options.as_reply then
+    mp.osd_message("The next tweet will not be a reply")
+    LAST_TWEET_ID = nil
+  end
+end
+
 local function send_tweet(text)
   local cmd = options.twitter_path ..
     " --consumer-key " .. options.consumer_key ..
@@ -178,11 +189,15 @@ local function send_tweet(text)
     " --access-token-secret " .. options.access_token_secret ..
     ' --status "' .. escape(text) .. '"'
 
+  if options.as_reply and LAST_TWEET_ID ~= nil then
+    cmd = cmd .. " --reply-to " .. tostring(LAST_TWEET_ID)
+  end
+
   for _, filename in ipairs(SCREENSHOT_QUEUE) do
     cmd = cmd .. ' --file "' .. escape(filename) .. '"'
   end
 
-  return system(cmd)
+  return utils.parse_json(system(cmd))
 end
 
 local function tweet()
@@ -192,15 +207,27 @@ local function tweet()
     queue_screenshot()
   end
 
+  local input_text = "Tweeting with " .. tostring(#SCREENSHOT_QUEUE) .. " screenshots"
+  if options.as_reply and LAST_TWEET_ID ~= nil then
+    input_text = input_text .. " replying to tweet ID " .. tostring(LAST_TWEET_ID)
+  end
+
   get_user_input(
     function(text)
       if text ~= nil then
-        local tweet_url = send_tweet(trim(text))
-        delete_queued_screenshots()
-        mp.osd_message("Tweet posted to " .. tweet_url)
+        local result = send_tweet(trim(text))
+
+        if result.type == "Success" then
+          delete_queued_screenshots()
+          LAST_TWEET_ID = result.id
+          mp.osd_message("Tweet posted to " .. result.url)
+        else
+          mp.osd_message("Error: " .. result.error)
+        end
       end
-    end, {
-      text = "Tweeting with " .. tostring(#SCREENSHOT_QUEUE) .. " screenshots",
+    end,
+    {
+      text = input_text,
       default_input = hashtag and (' ' .. hashtag)
     }
   )
@@ -219,3 +246,4 @@ end
 mp.add_key_binding(options.keybind_queue_screenshot, queue_screenshot)
 mp.add_key_binding(options.keybind_tweet, tweet)
 mp.add_key_binding(options.keybind_cancel, cancel)
+mp.add_key_binding(options.keybind_clear_reply, clear_reply)

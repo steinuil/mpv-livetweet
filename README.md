@@ -41,6 +41,12 @@ The script tries to fetch the hashtag of the anime you're currently watching wit
 fetch_hashtag=no
 ```
 
+By default the script sends tweets as a reply to the last tweet it sent during the same session. You can clear the last tweet ID by exiting the player, using the keybind, or you can disable this functionality by setting the `as_reply` option to `no` in the config file.
+
+```
+as_reply=no`
+```
+
 ## Commands
 
 | Shortcut  | When queue is empty            | With screenshots in queue |
@@ -48,6 +54,7 @@ fetch_hashtag=no
 | **Alt+s** | Queue a screenshot             | Queue a screenshot        |
 | **Alt+t** | Take a screenshot and tweet it | Tweet queued screenshots  |
 | **Alt+c** | -                              | Delete queued screenshots |
+| **Alt+x** | Clear the last tweet ID        | Clear the last tweet ID   |
 
 The keybinds can be changed in the config file.
 
@@ -55,6 +62,7 @@ The keybinds can be changed in the config file.
 keybind_queue_screenshot=Alt+s
 keybind_tweet=Alt+t
 keybind_cancel=Alt+c
+keybind_clear_reply=Alt+x
 ```
 
 ---
