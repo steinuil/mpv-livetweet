@@ -14,26 +14,23 @@ Be that dick who tweets screenshots of their favourite anime spoiling everyone *
 - Multi-screenshot drifting
 - Annie-May hashtag retrieving
 
-## Installation
+## Usage
 
-Compile the twitter crate with Rust and copy the resulting `target/release/twitter` binary somewhere.
+Create your config using the `get_keys` binary. A browser window will open and you'll get a code after clicking Authorize. Write the code into the terminal and a file called `mpv-livetweet.conf` will be created.
 
-```
-cargo build --release
-```
+Create a folder called `script-opts` in your mpv config folder (the one containing `mpv.conf`) and move the `mpv-livetweet.conf` file into it.
 
-Create a new Twitter app and get your consumer API key, consumer API secret and your own token key and secrets.
+Copy the `twitter` binary somewhere and copy its path.
 
-Create a folder called `script-opts` in your mpv config folder (the one containing `mpv.conf`) and create a file called `mpv-livetweet.conf` in it with these options:
+Open `mpv-livetweet.conf` and configure the path to `curl` and to the `twitter` binary.
 
 ```
+# On Windows 10 curl_path is C:\Windows\SysWOW64\curl.exe
 curl_path=/path/to/curl
 twitter_path=/path/to/twitter/binary
-consumer_key=your app's consumer API key
-consumer_secret=your app's consumer API secret
-access_token_key=your access token key
-access_token_secret=your access token secret
 ```
+
+Copy `mpv-livetweet.lua` to the `scripts` folder in your mpv config folder.
 
 The script tries to fetch the hashtag of the anime you're currently watching with the AniList API and appends it to the tweet text. If you don't want it to be fetched, set the `fetch_hashtag` option to `no` in the config file.
 
@@ -63,6 +60,22 @@ keybind_queue_screenshot=Alt+s
 keybind_tweet=Alt+t
 keybind_cancel=Alt+c
 keybind_clear_reply=Alt+x
+```
+
+### From source
+
+Acquire a consumer API key and secret from a twitter app, either from an existing one or by creating your own on https://developer.twitter.com/en/apps.
+
+Compile the `twitter` and `get_keys` crates with Rust with the CONSUMER_KEY and CONSUMER_SECRET env variables set to the tokens you acquired.
+
+```
+CONSUMER_KEY=foo CONSUMER_SECRET=bar cargo build --release
+```
+
+Or on Powershell:
+
+```
+$ENV:CONSUMER_KEY="foo"; $ENV:CONSUMER_SECRET="bar"; cargo build --release
 ```
 
 ---
