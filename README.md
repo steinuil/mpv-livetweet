@@ -41,7 +41,7 @@ fetch_hashtag=no
 By default the script sends tweets as a reply to the last tweet it sent during the same session. You can clear the last tweet ID by exiting the player, using the keybind, or you can disable this functionality by setting the `as_reply` option to `no` in the config file.
 
 ```
-as_reply=no`
+as_reply=no
 ```
 
 ## Commands
