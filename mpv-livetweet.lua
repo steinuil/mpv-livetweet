@@ -123,7 +123,8 @@ local function get_show_hashtag()
   ))
 
   local hashtag =
-    response.data
+    response
+    and response.data
     and response.data.Media
     and response.data.Media.hashtag
 
