@@ -64,6 +64,12 @@ keybind_cancel=Alt+c
 keybind_clear_reply=Alt+x
 ```
 
+To increase the font size of the tweet input (which is really tiny by default), create a file called `user-input.conf` in the `script-opts` folder and set the `font_size` option to your preferred size. The default is `16`.
+
+```
+font_size=24
+```
+
 ### From source
 
 Acquire a consumer API key and secret from a twitter app, either from an existing one or by creating your own on https://developer.twitter.com/en/apps.
