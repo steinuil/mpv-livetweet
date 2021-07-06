@@ -32,6 +32,8 @@ twitter_path=/path/to/twitter/binary
 
 Copy `mpv-livetweet.lua` to the `scripts` folder in your mpv config folder.
 
+Download [`user-input.lua`](https://raw.githubusercontent.com/CogentRedTester/mpv-user-input/master/user-input.lua) and save it to the `scripts` folder in your mpv config folder.
+
 The script tries to fetch the hashtag of the anime you're currently watching with the AniList API and appends it to the tweet text. If you don't want it to be fetched, set the `fetch_hashtag` option to `no` in the config file.
 
 ```
