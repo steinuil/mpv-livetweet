@@ -17,3 +17,7 @@ jobs:
         with:
           command: build
           args: --release
+
+      - run: mkdir dist
+      - run: cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
+      - run: cd dist && zip mpv-livetweet_v1.0.1_linux.zip *
