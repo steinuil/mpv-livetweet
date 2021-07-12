@@ -1,8 +1,21 @@
 name: Release
 on: [release, workflow_dispatch]
 jobs:
-  build_linux:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            copy_artifacts: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
+            artifact_name: build_linux
+          - os: macos-latest
+            copy_artifacts: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
+            artifact_name: build_macos
+          - os: windows-latest
+            copy_artifacts: mkdir dist ; cp target/release/get_keys.exe,target/release/twitter.exe,mpv-livetweet.lua dist
+            artifact_name: build_windows
+
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,40 +34,98 @@ jobs:
           command: build
           args: --release
 
-      - name: Create release zip
-        run: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist && cd dist && zip mpv-livetweet_v1.0.1_linux.zip *
+      - name: Copy artifacts to dist
+        run: ${{ matrix.copy_artifacts }}
 
       - name: Upload release zip
         uses: actions/upload-artifact@v2
         with:
-          name: build_linux
-          path: dist/mpv-livetweet_v1.0.1_linux.zip
+          name: ${{ matrix.artifact_name }}
+          path: dist/*
 
-  build_windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # build_linux:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+  #     - name: Install Rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
 
-      - name: Build
-        uses: actions-rs/cargo@v1
-        env:
-          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
-        with:
-          command: build
-          args: --release
+  #     - name: Build
+  #       uses: actions-rs/cargo@v1
+  #       env:
+  #         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+  #         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+  #       with:
+  #         command: build
+  #         args: --release
 
-      - name: Create release zip
-        run: mkdir dist ; cp target\release\get_keys.exe target\release\twitter.exe mpv-livetweet.lua dist ; cd dist ; 7z a mpv-livetweet_v1.0.1_windows.zip *
+  #     - name: Create release zip
+  #       run: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist && cd dist && zip mpv-livetweet_v1.0.1_linux.zip *
 
-      - name: Upload release zip
-        uses: actions/upload-artifact@v2
-        with:
-          name: build_windows
-          path: dist\mpv-livetweet_v1.0.1_windows.zip
+  #     - name: Upload release zip
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: build_linux
+  #         path: dist/mpv-livetweet_v1.0.1_linux.zip
+
+  # build_macos:
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Install Rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+
+  #     - name: Build
+  #       uses: actions-rs/cargo@v1
+  #       env:
+  #         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+  #         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+  #       with:
+  #         command: build
+  #         args: --release
+
+  #     - name: Create release zip
+  #       run: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist && cd dist && zip mpv-livetweet_v1.0.1_macos.zip *
+
+  #     - name: Upload release zip
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: build_macos
+  #         path: dist/mpv-livetweet_v1.0.1_macos.zip
+
+  # build_windows:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Install Rust toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+
+  #     - name: Build
+  #       uses: actions-rs/cargo@v1
+  #       env:
+  #         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+  #         CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+  #       with:
+  #         command: build
+  #         args: --release
+
+  #     - name: Create release zip
+  #       run: mkdir dist ; cp target\release\get_keys.exe,target\release\twitter.exe,mpv-livetweet.lua dist ; cd dist ; 7z a mpv-livetweet_v1.0.1_windows.zip *
+
+  #     - name: Upload release zip
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: build_windows
+  #         path: dist\mpv-livetweet_v1.0.1_windows.zip
