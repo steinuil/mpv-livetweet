@@ -150,7 +150,17 @@ local function queue_screenshot()
     return
   end
 
-  local shot = "mpv-livetweet-screenshot-" .. tostring(os.time()) .. ".jpg"
+  local dir =
+    os.getenv("TMPDIR") or
+    os.getenv("TEMP") or
+    os.getenv("HOME") or
+    os.getenv("USERPROFILE") or
+    ""
+
+  local shot = utils.join_path(
+    dir,
+    "mpv-livetweet-screenshot-" .. tostring(os.time()) .. ".jpg"
+  )
   if file_exists(shot) then
     mp.commandv("File already exists, screenshot not taken")
     return
