@@ -11,16 +11,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            copy_artifacts: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
+            copy_artifacts: cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
             artifact_name: build_linux
           - os: macos-latest
-            copy_artifacts: mkdir dist && cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
+            copy_artifacts: cp target/release/get_keys target/release/twitter mpv-livetweet.lua dist
             artifact_name: build_macos
           - os: windows-latest
-            copy_artifacts: mkdir dist ; cp target/release/get_keys.exe,target/release/twitter.exe,mpv-livetweet.lua dist
+            copy_artifacts: cp target/release/get_keys.exe,target/release/twitter.exe,mpv-livetweet.lua dist
             artifact_name: build_windows
 
     runs-on: ${{ matrix.os }}
+
+    environment: Twitter
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -38,6 +41,9 @@ jobs:
         with:
           command: build
           args: --release
+
+      - name: Create dist directory
+        run: mkdir dist
 
       - name: Copy artifacts to dist
         run: ${{ matrix.copy_artifacts }}
