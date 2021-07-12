@@ -179,7 +179,7 @@ local function delete_queued_screenshots()
   SCREENSHOT_QUEUE = {}
 end
 
-mp.register_event('shutdown', delete_queued_screenshots)
+mp.register_event("shutdown", delete_queued_screenshots)
 
 -- Tweet
 
