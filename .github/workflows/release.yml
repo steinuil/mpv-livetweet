@@ -1,5 +1,10 @@
 name: Release
-on: [release, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*.*.*
+
 jobs:
   build:
     strategy:
@@ -42,6 +47,34 @@ jobs:
         with:
           name: ${{ matrix.artifact_name }}
           path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+
+      - name: Zip windows
+        run: zip ../mpv-livetweet_windows.zip *
+        working-directory: build_windows
+
+      - name: Zip linux
+        run: zip ../mpv-livetweet_linux.zip *
+        working-directory: build_linux
+
+      - name: Zip macos
+        run: zip ../mpv-livetweet_macos.zip *
+        working-directory: build_macos
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: |
+            mpv-livetweet_windows.zip
+            mpv-livetweet_linux.zip
+            mpv-livetweet_macos.zip
 
   # build_linux:
   #   runs-on: ubuntu-latest
