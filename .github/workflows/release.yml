@@ -1,5 +1,5 @@
 name: Release
-on: [release]
+on: [release, workflow_run]
 jobs:
   build:
     runs-on: ubuntu-latest
