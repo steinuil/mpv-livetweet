@@ -30,7 +30,12 @@ end
 local function escape(str)
   str = str:gsub('\\', '\\\\')
   str = str:gsub('"', '\\"')
-  return str
+  if str:len() > 0 then
+    return str
+  else
+    -- Whatever shell is used on Windows doesn't like empty string arguments, apparently
+    return " "
+  end
 end
 
 -- Get tweet input
@@ -208,7 +213,11 @@ local function send_tweet(text)
     cmd = cmd .. ' --file "' .. escape(filename) .. '"'
   end
 
-  return utils.parse_json(system(cmd))
+  local result = utils.parse_json(system(cmd))
+
+  if not result then print(cmd) end
+
+  return result or { type = "Failure", error = "Couldn't read the screenshot files" }
 end
 
 local function tweet()
